@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Khái niệm Nền tảng — Ra Quyết Định</title>
+<style>
+  :root{
+    --paper:#F7F5F0; --card:#FFFFFF; --ink:#1A1917; --ink-soft:#6B645C;
+    --line:#DDD8CC; --accent:#2563EB; --ring:rgba(37,99,235,.20);
+    --c1:#2563EB; --c2:#7C3AED; --c3:#DB2777; --c4:#D97706;
+    --c5:#16A34A; --c6:#0891B2; --c7:#DC2626; --c8:#9333EA;
+    --c9:#15803D; --c10:#B45309;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:var(--paper);color:var(--ink);font-family:-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;}
+  body{line-height:1.5;padding-bottom:80px;}
+
+  header{max-width:1120px;margin:0 auto;padding:52px 28px 32px;border-bottom:1px solid var(--line);}
+  .eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:11px;font-weight:700;color:var(--accent);margin-bottom:12px;}
+  h1{font-size:clamp(32px,5.5vw,56px);font-weight:800;letter-spacing:-0.02em;line-height:1.07;}
+  h1 em{color:var(--accent);font-style:normal;}
+  .subtitle{margin-top:12px;max-width:660px;color:var(--ink-soft);font-size:15.5px;line-height:1.62;}
+  .quote-bar{margin-top:18px;max-width:600px;font-size:14px;color:var(--ink-soft);font-style:italic;border-left:3px solid var(--accent);padding-left:14px;line-height:1.58;}
+
+  .controls{max-width:1120px;margin:26px auto 0;padding:0 28px;}
+  .search-wrap{position:relative;margin-bottom:16px;}
+  #search{width:100%;font-size:15.5px;padding:13px 18px 13px 44px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);outline:none;transition:border-color .15s,box-shadow .15s;}
+  #search:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring);}
+  .search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-soft);pointer-events:none;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);font-size:13px;font-weight:600;padding:6px 14px;border-radius:999px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--dotcolor,#bbb);flex-shrink:0;}
+  .chip:hover{border-color:var(--accent);color:var(--ink);}
+  .chip.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .chip.active .dot{background:#fff;}
+
+  .count-row{max-width:1120px;margin:14px auto 0;padding:0 28px;font-size:13px;color:var(--ink-soft);}
+
+  .grid{max-width:1120px;margin:16px auto 0;padding:0 28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:16px;align-items:start;}
+
+  .card{background:var(--card);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;transition:box-shadow .15s,border-color .2s;}
+  .card:hover{box-shadow:0 4px 24px -8px rgba(37,99,235,.15);border-color:color-mix(in srgb,var(--cc) 35%,var(--line));}
+  .card.is-open{border-color:color-mix(in srgb,var(--cc) 50%,var(--line));box-shadow:0 6px 28px -8px rgba(37,99,235,.18);}
+
+  .card-header{padding:18px 18px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;}
+  .card-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .card-num{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--cc);}
+  .cat-badge{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--cc);background:color-mix(in srgb,var(--cc) 12%,white);padding:3px 9px;border-radius:6px;}
+  .card-title{font-size:18px;font-weight:700;line-height:1.25;color:var(--ink);margin-bottom:3px;}
+  .card-en{font-size:12px;font-weight:500;color:var(--ink-soft);margin-bottom:10px;letter-spacing:.01em;}
+  .card-short{font-size:13.5px;color:var(--ink-soft);line-height:1.56;}
+  .card-short strong{color:var(--cc);}
+  .card-toggle{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:12.5px;font-weight:700;color:var(--cc);}
+  .card-toggle .arr{width:14px;height:14px;transition:transform .22s cubic-bezier(.4,0,.2,1);}
+  .card-toggle.open .arr{transform:rotate(180deg);}
+
+  .card-body{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1);}
+  .card-body.open{max-height:1600px;}
+  .card-body-inner{padding:0 18px 20px;border-top:1px solid var(--line);margin-top:2px;}
+
+  .section{margin-top:16px;}
+  .section-label{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--cc);margin-bottom:8px;}
+  .section-label svg{width:13px;height:13px;flex-shrink:0;}
+  .section-text{font-size:14.5px;line-height:1.72;color:var(--ink);}
+  .section-text strong{color:var(--cc);font-weight:700;}
+  .example-box{background:color-mix(in srgb,#D97706 8%,var(--paper));border-left:3px solid #D97706;border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.65;font-style:italic;color:var(--ink);}
+  .example-box strong{font-style:normal;color:#92400E;font-weight:700;}
+  .takeaway-box{background:color-mix(in srgb,var(--cc) 8%,#fff);border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.60;color:var(--ink);}
+  .takeaway-box strong{color:var(--cc);font-weight:700;}
+
+  .no-results{max-width:1120px;margin:50px auto;padding:0 28px;text-align:center;color:var(--ink-soft);display:none;}
+  footer{max-width:1120px;margin:50px auto 0;padding:22px 28px 0;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);text-align:center;}
+
+  @media(max-width:600px){
+    header,.controls,.count-row,.grid,footer{padding-left:16px;padding-right:16px;}
+    .grid{grid-template-columns:1fr;gap:12px;}
+    h1{font-size:32px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Bộ công cụ tư duy · 100 khái niệm nền tảng</div>
+  <h1>Tinh tuý <em>Ra Quyết Định</em></h1>
+  <p class="subtitle">100 khái niệm cốt lõi về ra quyết định — từ nền tảng nhận thức, thiên kiến tư duy, khung vấn đề, đến phân tích rủi ro, tư duy hệ thống và quyết định nhóm. Từ khoá quan trọng được <strong>in đậm</strong> với thuật ngữ tiếng Anh trong ngoặc. Bấm vào thẻ để mở — thẻ cũ tự đóng.</p>
+  <p class="quote-bar">"Chất lượng của quyết định phụ thuộc vào chất lượng của quá trình ra quyết định — không phải vào kết quả." — Annie Duke</p>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="search" placeholder="Tìm khái niệm... (ví dụ: thiên kiến xác nhận, mô hình tâm thần, rủi ro)" autocomplete="off">
+  </div>
+  <div class="chips" id="chips"></div>
+</div>
+<div class="count-row" id="countRow"></div>
+<div class="grid" id="grid"></div>
+<div class="no-results" id="noResults">Không tìm thấy khái niệm phù hợp. Hãy thử từ khoá khác.</div>
+<footer>100 khái niệm nền tảng về Ra Quyết Định · Bấm vào thẻ để mở — thẻ cũ tự đóng · Lưu trang để dùng offline</footer>
+
+<script>
+const CATS=[
+  {key:"nentang",   label:"Nền tảng nhận thức",           color:"var(--c1)"},
+  {key:"thienkien", label:"Thiên kiến & Heuristics",      color:"var(--c2)"},
+  {key:"khung",     label:"Khung & Định nghĩa vấn đề",    color:"var(--c3)"},
+  {key:"thongtin",  label:"Thu thập & Đánh giá thông tin",color:"var(--c4)"},
+  {key:"congcu",    label:"Mô hình & Công cụ phân tích",  color:"var(--c5)"},
+  {key:"ruiro",     label:"Rủi ro & Bất định",            color:"var(--c6)"},
+  {key:"hethong",   label:"Tư duy hệ thống",              color:"var(--c7)"},
+  {key:"tamly",     label:"Tâm lý & Cảm xúc",             color:"var(--c8)"},
+  {key:"trucgiac",  label:"Phán đoán & Trực giác",        color:"var(--c9)"},
+  {key:"nhom",      label:"Quyết định nhóm & Tổ chức",    color:"var(--c10)"},
+];
+
+const DATA=[
+
+// ===== 1. NỀN TẢNG NHẬN THỨC =====
+{cat:"nentang",vi:"Hệ thống 1 và Hệ thống 2",en:"System 1 and System 2 Thinking",
+short:"Não người có hai chế độ xử lý: <strong>Hệ thống 1 (System 1)</strong> — nhanh, tự động, cảm tính; và <strong>Hệ thống 2 (System 2)</strong> — chậm, có chủ đích, phân tích. Hầu hết quyết định hàng ngày chạy trên Hệ thống 1.",
+detail:"Daniel Kahneman (Nobel Kinh tế 2002) mô tả hai hệ thống này trong cuốn <strong>«Thinking, Fast and Slow»</strong>. <strong>Hệ thống 1</strong> vận hành liên tục, tiêu tốn ít năng lượng, xử lý thông tin song song — đây là nguồn gốc của trực giác, cảm xúc tức thì và phần lớn các <strong>thiên kiến nhận thức (cognitive biases)</strong>. <strong>Hệ thống 2</strong> chậm hơn, tiêu tốn năng lượng tinh thần nhiều, xử lý tuần tự — nhưng có khả năng logic, tính toán và kiểm tra lại Hệ thống 1. Vấn đề: Hệ thống 2 hay «lười biếng» và thường hợp lý hóa những gì Hệ thống 1 đã quyết định. Nhận biết khi nào bạn đang dùng chế độ nào là kỹ năng ra quyết định nền tảng.",
+example:"Bạn thấy ngay một khuôn mặt giận dữ trong đám đông (Hệ thống 1 — tự động). Nhưng để tính 17 × 24, bạn phải dừng lại, tập trung và thực hiện từng bước (Hệ thống 2). Khi mua cổ phiếu vì «cảm giác tốt», Hệ thống 1 đang lái — và Hệ thống 2 «lười» biện hộ cho quyết định đó thay vì phân tích thực sự.",
+takeaway:"Trước quyết định quan trọng, hãy hỏi: <strong>«Tôi đang dùng Hệ thống 1 hay 2?»</strong> Nếu là 1, hãy kích hoạt Hệ thống 2 bằng cách dừng lại, viết ra và phân tích từng bước."},
+
+{cat:"nentang",vi:"Giới hạn lý trí",en:"Bounded Rationality",
+short:"Con người không thể xử lý tất cả thông tin để đạt quyết định tối ưu tuyệt đối — chúng ta bị giới hạn bởi <strong>năng lực nhận thức (cognitive capacity)</strong>, thời gian và thông tin sẵn có. Kết quả: chúng ta «đủ tốt» thay vì «tối ưu nhất».",
+detail:"Khái niệm của Herbert Simon (Nobel Kinh tế 1978) — ông gọi hành vi ra quyết định thực tế là <strong>«satisficing»</strong> (ghép từ «satisfying» + «sufficing»): chọn giải pháp đủ tốt thay vì tìm kiếm giải pháp hoàn hảo. Giới hạn lý trí đến từ ba nguồn: (1) <strong>thông tin không đầy đủ</strong> — không bao giờ biết tất cả; (2) <strong>năng lực tính toán có hạn</strong> — não không thể xử lý mọi kịch bản; (3) <strong>thời gian hữu hạn</strong> — quyết định phải đưa ra trước khi có đủ dữ liệu. Hiểu điều này giúp thiết kế quy trình ra quyết định thực tế thay vì theo đuổi sự hoàn hảo không thể đạt.",
+example:"Khi tuyển nhân viên, nhà quản lý không phỏng vấn tất cả ứng viên có thể — họ dừng khi tìm được người «đủ tốt» theo các tiêu chí đã đặt ra. Tìm kiếm nhà hàng: bạn không tra cứu mọi nhà hàng trong thành phố, chỉ cần tìm một nơi đủ tốt trong vòng 10 phút tìm kiếm.",
+takeaway:"Chấp nhận <strong>«satisficing»</strong> là chiến lược hợp lý khi chi phí tìm kiếm thêm thông tin vượt quá lợi ích. Câu hỏi đúng không phải «quyết định tốt nhất là gì?» mà là «quyết định đủ tốt với thông tin tôi đang có là gì?»"},
+
+{cat:"nentang",vi:"Mô hình tâm thần",en:"Mental Models",
+short:"<strong>Mô hình tâm thần (mental models)</strong> là những khung khái niệm trong đầu giúp ta hiểu cách thế giới vận hành — chúng định hình những gì ta chú ý, cách ta diễn giải thông tin và loại giải pháp ta nghĩ ra.",
+detail:"Charlie Munger gọi đây là <strong>«latticework of mental models»</strong> (mạng lưới mô hình tâm thần) — ông cho rằng cần ít nhất 80-100 mô hình từ nhiều lĩnh vực để tư duy sắc bén. Vấn đề: hầu hết người chỉ có một vài mô hình từ lĩnh vực chuyên môn của mình, dẫn đến hiện tượng <strong>«hammer and nail»</strong> — người có búa thì thấy mọi thứ đều là đinh. Mô hình tốt: <strong>entropy</strong> (mọi thứ có xu hướng suy thoái), <strong>lợi thế so sánh (comparative advantage)</strong>, <strong>hiệu ứng mạng (network effects)</strong>, <strong>lãi kép (compound interest)</strong>. Mô hình sai hoặc thiếu là nguyên nhân phổ biến của quyết định tệ.",
+example:"Nếu mô hình tâm thần duy nhất của bạn về kinh doanh là «tăng doanh thu», bạn sẽ bỏ qua những quyết định quan trọng về biên lợi nhuận, dòng tiền và rủi ro. Một nhà đầu tư dùng mô hình «thị trường hiệu quả (efficient market)» sẽ ra quyết định khác hoàn toàn so với người dùng mô hình «ông thị trường (Mr. Market)» của Buffett.",
+takeaway:"Đa dạng hóa <strong>mô hình tâm thần</strong> từ nhiều lĩnh vực. Trước quyết định quan trọng, hỏi: <strong>«Mô hình nào tôi đang dùng? Có mô hình nào khác cho thấy bức tranh khác không?»</strong>"},
+
+{cat:"nentang",vi:"Kiệt sức quyết định",en:"Decision Fatigue",
+short:"Chất lượng quyết định suy giảm sau khi đưa ra nhiều quyết định liên tiếp — não bị kiệt sức và chuyển sang <strong>tư duy tắt (default mode)</strong>: hoặc đồng ý tất cả, hoặc từ chối tất cả để tiết kiệm năng lượng.",
+detail:"Nghiên cứu nổi tiếng của Danziger (2011) về thẩm phán Israel: tỷ lệ duyệt hồ sơ tại ngoại giảm từ ~65% đầu ngày xuống gần 0% trước giờ nghỉ — và tăng trở lại sau khi nghỉ ăn. <strong>Ý chí và khả năng phán đoán là tài nguyên có hạn</strong> — chúng cạn kiệt theo mỗi quyết định. Hệ quả thực tế: quyết định quan trọng nên đưa ra khi năng lượng tinh thần còn cao; tự động hóa các quyết định nhỏ lặp lại; đặt các quyết định quan trọng vào đầu ngày. Liên quan chặt với <strong>kiệt sức bản ngã (ego depletion)</strong> của Baumeister.",
+example:"Steve Jobs và Mark Zuckerberg mặc cùng một kiểu quần áo mỗi ngày — giảm một quyết định nhỏ buổi sáng để dành năng lượng cho quyết định lớn hơn. Sau 8 giờ họp liên tục, một CEO dễ dàng phê duyệt ngân sách triệu đô mà không phân tích kỹ — vì não đã mệt và chọn cách dễ nhất.",
+takeaway:"Đặt <strong>quyết định quan trọng nhất vào đầu ngày</strong>. Tự động hóa hoặc loại bỏ các quyết định nhỏ lặp lại (quần áo, ăn uống, lịch trình) để tiết kiệm «ngân sách quyết định» cho những thứ thực sự quan trọng."},
+
+{cat:"nentang",vi:"Cái bẫy chi phí chìm",en:"Sunk Cost Fallacy",
+short:"Xu hướng tiếp tục một hành động vì đã đầu tư tài nguyên (tiền, thời gian, công sức) vào đó trong quá khứ — dù bằng chứng hiện tại cho thấy nên dừng. <strong>Chi phí chìm (sunk cost)</strong> là tiền đã mất, không thể lấy lại — không nên ảnh hưởng đến quyết định tương lai.",
+detail:"Đây là một trong những thiên kiến phổ biến và tốn kém nhất trong ra quyết định. Về mặt logic: <strong>quyết định tốt chỉ dựa trên chi phí và lợi ích trong tương lai</strong>, không phải quá khứ. Nhưng não người ghét «lãng phí» và cảm thấy đau khi bỏ cuộc — điều này dẫn đến <strong>leo thang cam kết (escalation of commitment)</strong>: đầu tư thêm vào dự án thất bại chỉ để «chứng minh» khoản đầu tư ban đầu là đúng. Dấu hiệu nhận biết: nghe mình nói «nhưng chúng ta đã bỏ ra nhiều quá rồi», «không thể bỏ cuộc bây giờ». Câu hỏi đúng: <strong>«Nếu hôm nay bắt đầu lại từ đầu, tôi có chọn con đường này không?»</strong>",
+example:"Một công ty đã đầu tư 10 tỷ vào một phần mềm nội bộ không hoạt động tốt. Thay vì chuyển sang giải pháp khác tốt hơn (chi thêm 2 tỷ), họ tiếp tục sửa chữa và thêm tính năng (chi thêm 8 tỷ nữa) vì «đã bỏ 10 tỷ rồi». Tổng thiệt hại: 18 tỷ thay vì 12 tỷ nếu nhận ra sớm.",
+takeaway:"Hỏi thẳng: <strong>«Nếu hôm nay bắt đầu lại, tôi có chọn con đường này không?»</strong> Nếu không — thì không nên tiếp tục chỉ vì quá khứ. <strong>Chi phí chìm đã mất rồi</strong> dù bạn tiếp tục hay dừng."},
+
+{cat:"nentang",vi:"Ngụy biện chi phí cơ hội",en:"Opportunity Cost",
+short:"Giá thực sự của bất kỳ quyết định nào không phải là những gì bạn trả — mà là giá trị của lựa chọn tốt nhất bạn từ bỏ. <strong>Chi phí cơ hội (opportunity cost)</strong> thường vô hình nhưng luôn hiện diện.",
+detail:"Mỗi lựa chọn đều loại trừ những lựa chọn khác. Khi bạn chọn A, bạn không chỉ «mua A» — bạn «từ chối B, C, D». Vấn đề: não người tự nhiên tập trung vào chi phí hiển thị (tiền bạc, thời gian) mà bỏ qua chi phí vô hình (những gì bị mất). <strong>Tư duy chi phí cơ hội</strong> là nền tảng của kinh tế học và quyết định tài chính. Ví dụ nổi tiếng: nếu bạn là luật sư kiếm 10 triệu/giờ, tự mình sơn nhà (thay vì thuê thợ 500.000đ) thực ra «tốn» 10 triệu tiền cơ hội. Áp dụng rộng hơn: thời gian ở một cuộc họp vô nghĩa có chi phí cơ hội là thời gian đó không được dùng cho việc quan trọng hơn.",
+example:"Một startup từ chối hợp đồng 1 tỷ để «tập trung vào sản phẩm». Chi phí cơ hội thực sự: không chỉ là 1 tỷ mà là bài học thực tế từ khách hàng, cashflow, và credibility. Một sinh viên chọn đi du học 2 năm: chi phí không chỉ là học phí mà còn là 2 năm thu nhập từ việc đi làm sớm.",
+takeaway:"Luôn hỏi: <strong>«Tôi đang từ bỏ điều gì khi chọn điều này?»</strong> Liệt kê rõ ràng 2-3 lựa chọn thay thế tốt nhất trước khi quyết định — không phải để do dự mà để quyết định có chủ đích."},
+
+{cat:"nentang",vi:"Độ chính xác vs Độ chắc chắn",en:"Accuracy vs. Certainty",
+short:"Một quyết định tốt không đảm bảo kết quả tốt, và kết quả tốt không chứng minh quyết định đúng. <strong>Kết quả (outcome)</strong> và <strong>chất lượng quyết định (decision quality)</strong> là hai thứ khác nhau — phải đánh giá quyết định dựa trên quá trình, không phải kết quả.",
+detail:"Annie Duke gọi hiện tượng nhìn kết quả để đánh giá quyết định là <strong>«resulting»</strong> — một bẫy tư duy nguy hiểm. Ví dụ: một cầu thủ bóng bầu dục chuyền bóng qua tuyến cuối cùng với 51% xác suất thành công (quyết định đúng về xác suất) — nhưng đối thủ chặn bóng (kết quả tệ). Mọi người chỉ nhìn kết quả và phán xét quyết định. Ngược lại: đi xe không đội mũ bảo hiểm 100 lần không gặp tai nạn không chứng minh đó là quyết định tốt. Để cải thiện ra quyết định, cần tách biệt: <strong>«Quá trình ra quyết định có hợp lý không?»</strong> vs <strong>«Kết quả có như mong đợi không?»</strong>",
+example:"Một nhà đầu tư mua cổ phiếu của công ty xấu và may mắn lời lớn — đây không phải quyết định tốt, chỉ là kết quả may mắn. Một bác sĩ chuẩn đoán đúng bệnh hiếm gặp với 80% xác suất — bệnh nhân vẫn có thể không có bệnh đó (kết quả tệ), nhưng bác sĩ đã ra quyết định tốt nhất có thể với thông tin hiện có.",
+takeaway:"Đánh giá quyết định dựa trên <strong>quá trình và thông tin có tại thời điểm đó</strong>, không phải kết quả. Giữ <strong>«decision journal»</strong> để ghi lại lý do ra quyết định — giúp học hỏi thực sự thay vì bị méo mó bởi kết quả sau này."},
+
+{cat:"nentang",vi:"Đường cơ sở và tỷ lệ cơ sở",en:"Base Rate",
+short:"<strong>Tỷ lệ cơ sở (base rate)</strong> là tần suất một sự kiện xảy ra trong tổng thể — đây là điểm khởi đầu cần thiết để đánh giá xác suất bất kỳ sự kiện nào, nhưng hầu hết người ra quyết định bỏ qua nó.",
+detail:"<strong>Bỏ qua tỷ lệ cơ sở (base rate neglect)</strong> là một trong những thiên kiến nhận thức phổ biến nhất. Tư duy đúng: bắt đầu với câu hỏi <strong>«Tỷ lệ thành công của loại dự án/quyết định này nói chung là bao nhiêu?»</strong> trước khi phân tích đặc thù của tình huống cụ thể. Kahneman và Tversky gọi tư duy bắt đầu từ tỷ lệ cơ sở là <strong>«outside view» (quan điểm ngoài)</strong> — đối lập với <strong>«inside view» (quan điểm trong)</strong> — nhìn từ bên ngoài vào loại sự kiện, thay vì đắm chìm vào chi tiết riêng của tình huống. Bên ngoài thường cho thấy tỷ lệ thành công thấp hơn nhiều so với khi nhìn từ bên trong.",
+example:"90% startup thất bại trong 5 năm đầu (base rate). Một founder tự tin với ý tưởng của mình — nhưng base rate này phải là điểm khởi đầu của kế hoạch, không phải bị bỏ qua. Thời gian hoàn thành dự án phần mềm: đa số dự án IT trễ hơn 2x dự tính — đây là base rate, không phải ngoại lệ.",
+takeaway:"Trước mỗi dự án/quyết định quan trọng, hỏi: <strong>«Tỷ lệ thành công của loại việc này là bao nhiêu?»</strong> Dùng <strong>«outside view»</strong> làm mỏ neo, sau đó điều chỉnh theo đặc thù riêng."},
+
+{cat:"nentang",vi:"Nhật ký quyết định",en:"Decision Journal",
+short:"Ghi lại quyết định, lý do, thông tin có tại thời điểm đó và kết quả kỳ vọng — sau đó quay lại đánh giá. Đây là công cụ học hỏi mạnh nhất để cải thiện chất lượng ra quyết định theo thời gian.",
+detail:"Không có nhật ký quyết định, não người bị ảnh hưởng nặng bởi <strong>thiên kiến nhìn lại (hindsight bias)</strong> — sau khi biết kết quả, chúng ta «nhớ» rằng mình đã biết trước sẽ như vậy. Điều này ngăn cản học hỏi thực sự. Một nhật ký quyết định tốt ghi: (1) <strong>Ngữ cảnh và quyết định</strong>; (2) <strong>Lý do và giả định</strong>; (3) <strong>Thông tin đã xem xét, thông tin còn thiếu</strong>; (4) <strong>Xác suất kỳ vọng</strong>; (5) <strong>Điều gì sẽ chứng minh tôi sai</strong>. Quay lại sau 3-6 tháng để đánh giá: quyết định đúng không? Giả định nào sai? Jeff Bezos và nhiều CEO nổi tiếng dùng thực hành này.",
+example:"Ghi vào tháng 3: «Tôi quyết định không tuyển thêm nhân sự bán hàng Q2 vì dự báo doanh thu thận trọng. Giả định: thị trường sẽ tăng chậm 10%. Rủi ro tôi bỏ qua: đối thủ đang tuyển dụng mạnh.» Tháng 6 quay lại: đối thủ chiếm thêm 15% thị phần. Bài học cụ thể để thay đổi quy trình.",
+takeaway:"Bắt đầu viết <strong>«decision journal»</strong> ngay hôm nay — chỉ 5-10 phút mỗi quyết định quan trọng. Sau 6 tháng, đây sẽ là tài sản học hỏi giá trị nhất bạn có về phong cách ra quyết định của chính mình."},
+
+{cat:"nentang",vi:"Siêu nhận thức trong quyết định",en:"Metacognition",
+short:"<strong>Siêu nhận thức (metacognition)</strong> — tư duy về cách mình đang tư duy — là kỹ năng nền tảng của người ra quyết định giỏi: nhận biết quá trình tư duy của chính mình, phát hiện khi nào mình đang thiên kiến và điều chỉnh.",
+detail:"Metacognition gồm hai thành phần: (1) <strong>Kiến thức metacognitive</strong> — hiểu điểm mạnh/yếu nhận thức của bản thân, biết khi nào dễ mắc lỗi; (2) <strong>Điều chỉnh metacognitive</strong> — chủ động thay đổi cách tiếp cận dựa trên tự đánh giá. Người có metacognition tốt hỏi: <strong>«Tôi đang dùng lối tắt tư duy nào?», «Điều gì có thể làm tôi sai ở đây?», «Tôi có đang hợp lý hóa không?»</strong> Đây là nền tảng của tất cả kỹ thuật chống thiên kiến — không thể khắc phục thiên kiến nếu không nhận ra mình đang có nó.",
+example:"Một nhà quản lý nhận ra rằng mình thường đưa ra quyết định tuyển dụng dựa trên cảm giác «chemistry» (Hệ thống 1) hơn là năng lực thực sự. Nhận thức này (metacognition) dẫn đến việc bổ sung bài test kỹ năng chuẩn hóa vào quy trình — không phải vì ai yêu cầu, mà vì hiểu giới hạn của chính mình.",
+takeaway:"Định kỳ tự hỏi: <strong>«Tôi đang tư duy như thế nào về vấn đề này?»</strong> Không phải «câu trả lời là gì» mà là «quá trình tôi đang dùng có phù hợp không?» Đây là điểm khác biệt cốt lõi giữa người ra quyết định giỏi và người bình thường."},
+
+// ===== 2. THIÊN KIẾN & HEURISTICS =====
+{cat:"thienkien",vi:"Thiên kiến xác nhận",en:"Confirmation Bias",
+short:"Xu hướng tìm kiếm, ưu tiên và nhớ thông tin <strong>xác nhận niềm tin sẵn có</strong> — đồng thời bỏ qua hoặc giảm nhẹ thông tin mâu thuẫn. Đây là thiên kiến phổ biến và nguy hiểm nhất trong ra quyết định.",
+detail:"<strong>Thiên kiến xác nhận (confirmation bias)</strong> hoạt động ở ba cấp độ: (1) <strong>Thu thập thông tin</strong> — tìm kiếm bằng chứng ủng hộ, tránh bằng chứng phản bác; (2) <strong>Diễn giải</strong> — cùng một dữ kiện nhưng diễn giải theo hướng có lợi cho niềm tin; (3) <strong>Ghi nhớ</strong> — nhớ những gì xác nhận, quên những gì phủ nhận. Đặc biệt nguy hiểm vì chúng ta <strong>không nhận ra mình đang làm điều này</strong>. Biện pháp đối phó: chủ động tìm kiếm bằng chứng phản bác (<strong>«đối lập đối số — steelmanning»</strong>), đặt câu hỏi <strong>«Điều gì có thể chứng minh tôi sai?»</strong>, và tìm người cố tình phản bác (<strong>«devil's advocate»</strong>).",
+example:"Một nhà đầu tư tin một cổ phiếu sẽ tăng — họ đọc kỹ mọi tin tốt về công ty đó và lướt qua tin xấu. Khi hai chuyên gia phân tích đều nói «có thể tăng», họ nhớ cả hai. Khi ba người nói «khả năng giảm» họ bỏ qua. Kết quả: quyết định không phản ánh thực tế mà phản ánh niềm tin ban đầu.",
+takeaway:"Trước mọi quyết định quan trọng, chủ động hỏi: <strong>«Bằng chứng nào sẽ thuyết phục tôi rằng tôi đang sai?»</strong> Nếu không thể trả lời — bạn đang trong bẫy confirmation bias."},
+
+{cat:"thienkien",vi:"Heuristic neo và điều chỉnh",en:"Anchoring Heuristic",
+short:"<strong>Hiệu ứng neo (anchoring effect)</strong> — con số, thông tin hay ý kiến đầu tiên được nghe có ảnh hưởng không tương xứng lên các đánh giá và quyết định tiếp theo, dù con số đó hoàn toàn vô căn cứ.",
+detail:"Kahneman và Tversky chứng minh: khi hỏi «Có phải 65% quốc gia châu Phi là thành viên LHQ không? — bạn đoán bao nhiêu phần trăm?» những người thấy con số 65% cho đánh giá cao hơn đáng kể so với nhóm thấy 10% — dù biết đây là số ngẫu nhiên. Anchoring xảy ra trong: (1) <strong>Đàm phán</strong> — ai đưa ra giá đầu tiên thường chiếm ưu thế; (2) <strong>Ước tính</strong> — số đầu tiên ảnh hưởng đến mọi con số tiếp theo; (3) <strong>Đánh giá rủi ro</strong> — mức độ thiệt hại đầu tiên nghe thấy định hình nhận thức về rủi ro. Biện pháp đối phó: ước tính độc lập trước khi nghe bất kỳ con số nào, nhận biết «neo» có chủ đích trong đàm phán.",
+example:"Giá niêm yết ban đầu của một căn hộ là 3 tỷ. Dù biết đây là «giá hỏi», người mua bắt đầu mặc cả từ mức đó thay vì ước tính giá trị thực sự. Kết quả: mọi cuộc đàm phán xoay quanh 3 tỷ, không phải giá thị trường thực tế 2,5 tỷ.",
+takeaway:"Trong đàm phán: <strong>cố gắng đưa ra neo trước</strong>. Khi bị neo bởi con số người khác: dừng lại, ước tính độc lập bằng phương pháp riêng, sau đó mới so sánh với neo đó."},
+
+{cat:"thienkien",vi:"Hiệu ứng nhìn lại",en:"Hindsight Bias",
+short:"Sau khi biết kết quả, chúng ta có xu hướng tin rằng mình «đã biết từ trước» — <strong>thiên kiến nhìn lại (hindsight bias)</strong> làm méo mó ký ức về độ chắc chắn ban đầu và ngăn cản học hỏi thực sự từ sai lầm.",
+detail:"Hindsight bias được Fischhoff phát hiện năm 1975 — ông gọi nó là <strong>«knew-it-all-along effect»</strong>. Cơ chế: sau khi biết kết quả, não tái cấu trúc ký ức về quá trình tư duy ban đầu để «khớp» với kết quả — dẫn đến cảm giác kết quả «hiển nhiên» và «đáng lẽ tôi phải biết». Hậu quả: (1) <strong>Không học được bài học thực sự</strong> vì nhớ sai về độ không chắc chắn ban đầu; (2) <strong>Đánh giá sai người khác</strong> — phán xét quyết định lịch sử dựa trên thông tin hiện tại; (3) <strong>Tự tin thái quá (overconfidence)</strong> trong tương lai vì cảm thấy mọi thứ đều «có thể đoán được». Biện pháp: nhật ký quyết định, ghi rõ độ chắc chắn tại thời điểm quyết định.",
+example:"Sau khi Covid-19 xảy ra, nhiều người nói «rõ ràng là đại dịch sẽ đến, tôi đã thấy dấu hiệu từ tháng 1». Nhưng tháng 1/2020, hầu hết không ai chuẩn bị gì. Hindsight bias tái cấu trúc ký ức về mức độ chắc chắn ban đầu.",
+takeaway:"Ghi lại <strong>mức độ chắc chắn tại thời điểm quyết định</strong> (ví dụ: «70% tôi nghĩ sẽ thành công»). Khi nhìn lại, so sánh với ghi chép, không với cảm giác «đương nhiên tôi biết»."},
+
+{cat:"thienkien",vi:"Thiên kiến khả dụng",en:"Availability Heuristic",
+short:"Đánh giá xác suất xảy ra của một sự kiện dựa trên mức độ <strong>dễ dàng nghĩ đến ví dụ (availability)</strong> — thứ gì dễ nhớ, sinh động hoặc gần đây được coi là phổ biến hơn thực tế.",
+detail:"<strong>Availability heuristic</strong> của Kahneman & Tversky: não dùng tần suất hồi tưởng (không phải tần suất thực) để ước tính xác suất. Điều này gây sai lệch vì: thứ gì <strong>gần đây, sinh động, hoặc cảm xúc mạnh</strong> dễ nhớ hơn thứ thống kê quan trọng hơn nhưng nhàm chán. Ví dụ kinh điển: tai nạn máy bay hiếm hơn tai nạn xe máy 100 lần, nhưng vì xuất hiện nhiều trên báo và cảm xúc mạnh hơn, người ta sợ bay hơn đi xe máy. Biện pháp: tìm kiếm dữ liệu thực tế thay vì dựa trên những ví dụ nổi bật trong đầu; hỏi <strong>«Cái tôi đang nhớ có đại diện cho tổng thể không?»</strong>",
+example:"Sau một vụ cướp ngân hàng nổi tiếng, mọi người đánh giá xác suất bị cướp cao hơn nhiều dù tỷ lệ thực không đổi. Một nhà đầu tư gần đây đọc 3 câu chuyện thành công về crypto — đánh giá crypto an toàn hơn thực tế vì ví dụ tốt dễ nghĩ đến hơn.",
+takeaway:"Khi đánh giá xác suất, hỏi: <strong>«Tôi đang dựa vào dữ liệu thực hay vào những ví dụ dễ nhớ?»</strong> Tìm kiếm base rate và dữ liệu thống kê, đặc biệt khi vừa nghe tin tức gây cảm xúc mạnh."},
+
+{cat:"thienkien",vi:"Thiên kiến tự tin thái quá",en:"Overconfidence Bias",
+short:"Xu hướng <strong>đánh giá quá cao độ chính xác của kiến thức và khả năng dự đoán</strong> của bản thân — một trong những thiên kiến được nghiên cứu nhiều nhất và nguy hiểm nhất trong ra quyết định.",
+detail:"Overconfidence xuất hiện ở nhiều dạng: (1) <strong>Overestimation</strong> — nghĩ mình giỏi hơn thực tế; (2) <strong>Overplacement</strong> — nghĩ mình giỏi hơn người khác («hiệu ứng Lake Wobegon»: 80% người lái xe nghĩ mình trên mức trung bình); (3) <strong>Overprecision</strong> — quá tự tin về độ chính xác của kiến thức (khoảng tin cậy 90% thực ra chỉ đúng 70%). Đặc biệt nguy hiểm vì: người có chuyên môn cao thường confident nhất trong lĩnh vực mình không chuyên, và <strong>«ta biết những gì ta không biết»</strong> (rumsfeld unknown unknowns) bị bỏ qua hoàn toàn. <strong>Dunning-Kruger effect</strong>: người ít biết thì overconfident nhất.",
+example:"Một khảo sát với 500 bác sĩ: khi họ nói «95% chắc chắn» về chẩn đoán, tỷ lệ đúng thực tế chỉ là 75%. Dự án IT: khi PM nói «chắc chắn xong trong 3 tháng», tỷ lệ trễ hơn 3 tháng là hơn 60%.",
+takeaway:"Tạo thói quen <strong>«khoảng tin cậy (confidence intervals)»</strong> thay vì dự đoán điểm: không nói «xong trong 3 tháng» mà nói «50% khả năng xong trong 3 tháng, 90% xong trong 5 tháng». Tìm người phản bác và hỏi cụ thể: <strong>«Tôi đang sai ở đâu?»</strong>"},
+
+{cat:"thienkien",vi:"Hiệu ứng đóng khung",en:"Framing Effect",
+short:"Cách một thông tin được <strong>trình bày (framing)</strong> ảnh hưởng sâu sắc đến quyết định — dù nội dung logic là giống nhau. <strong>«Cứu 200 người»</strong> vs <strong>«400 người chết»</strong> là cùng kết quả nhưng dẫn đến lựa chọn khác nhau.",
+detail:"Kahneman & Tversky chứng minh trong thí nghiệm «Asian Disease Problem»: cùng một phương án y tế, được đóng khung bằng số người sống thì 72% chọn; đóng khung bằng số người chết thì chỉ 22% chọn. Framing effect hoạt động vì: (1) <strong>Loss aversion (ác cảm mất mát)</strong> — mất 100.000đ đau hơn lời 100.000đ; (2) <strong>Ngữ cảnh tương đối</strong> — não đánh giá tương đối so với điểm tham chiếu (reference point), không tuyệt đối. Biện pháp: tái đóng khung vấn đề theo nhiều cách trước khi quyết định; chú ý đến điểm tham chiếu; hỏi <strong>«Nếu đóng khung ngược lại, tôi có quyết định giống nhau không?»</strong>",
+example:"«Xác suất thành công 90%» vs «xác suất thất bại 10%» — cùng con số nhưng cảm giác và quyết định thường khác nhau. Nhãn thực phẩm «95% không chứa chất béo» bán chạy hơn «5% chất béo» dù hoàn toàn giống nhau.",
+takeaway:"Trước quyết định quan trọng, <strong>tái đóng khung vấn đề ít nhất theo 2 cách đối lập</strong>: lợi ích và rủi ro, lời và lỗ, tích cực và tiêu cực. Nếu quyết định thay đổi theo cách đóng khung — bạn đang bị framing effect chi phối."},
+
+{cat:"thienkien",vi:"Hiệu ứng Halo và Sừng",en:"Halo and Horn Effect",
+short:"<strong>Halo effect</strong>: một đặc điểm tốt khiến chúng ta đánh giá cao mọi đặc điểm khác. <strong>Horn effect</strong>: một đặc điểm xấu khiến ta đánh giá thấp mọi thứ. Cả hai đều bóp méo đánh giá toàn diện.",
+detail:"Solomon Asch phát hiện: khi biết một người «thông minh, chăm chỉ, xung động, chỉ trích người khác, cứng đầu, đố kỵ», đánh giá tổng thể tích cực hơn khi liệt kê theo thứ tự ngược lại — dù cùng những tính từ. Halo effect đặc biệt mạnh với: <strong>ngoại hình</strong> (người đẹp được coi là thông minh và đáng tin hơn), <strong>thành tích đầu tiên</strong> (một công ty thành công sớm được đánh giá tốt hơn sau khi thất bại), <strong>thương hiệu</strong>. Trong phỏng vấn tuyển dụng: nhiều nhà tuyển dụng quyết định trong 90 giây đầu rồi dùng phần còn lại để xác nhận. Biện pháp: đánh giá từng tiêu chí độc lập, che thông tin định danh trước khi đánh giá.",
+example:"Một startup được đầu tư bởi Sequoia — dù sản phẩm trung bình, thị trường coi đó là dấu hiệu chất lượng (halo từ Sequoia). Ngược lại, một ứng viên tốt nghiệp từ trường không nổi tiếng bị đánh giá thấp hơn dù CV và kỹ năng tốt hơn ứng viên tốt nghiệp trường danh tiếng (horn effect từ trường học).",
+takeaway:"Khi đánh giá người hoặc dự án, <strong>đánh giá từng tiêu chí riêng biệt</strong> trước khi tổng hợp. Hỏi: <strong>«Ấn tượng đầu tiên của tôi có đang ảnh hưởng đến đánh giá các tiêu chí sau không?»</strong>"},
+
+{cat:"thienkien",vi:"Thiên kiến hiện trạng",en:"Status Quo Bias",
+short:"Xu hướng ưu tiên <strong>giữ nguyên trạng thái hiện tại (status quo)</strong> thay vì thay đổi — ngay cả khi thay đổi mang lại kết quả tốt hơn. Không hành động được coi là an toàn, dù đó cũng là một quyết định.",
+detail:"Status quo bias đến từ: (1) <strong>Loss aversion</strong> — rủi ro mất mát từ thay đổi cảm thấy lớn hơn lợi ích tiềm năng; (2) <strong>Chi phí chìm</strong> — đã đầu tư vào hệ thống/quy trình hiện tại; (3) <strong>Comfort zone</strong> — thay đổi đòi hỏi nỗ lực nhận thức. Đây là lý do tại sao các <strong>«nudge» (thiết kế mặc định)</strong> rất mạnh: nếu mặc định là «đăng ký nội tạng», tỷ lệ đăng ký tăng từ 20% lên 80%+ so với mặc định «không đăng ký». Biện pháp: <strong>«zero-based thinking»</strong> — hỏi «nếu hôm nay bắt đầu từ đầu, tôi có chọn cái này không?»; đặt «không làm gì» vào danh sách lựa chọn để so sánh công bằng.",
+example:"Một công ty dùng phần mềm ERP từ 2010 dù thị trường có giải pháp tốt hơn và rẻ hơn. Nhưng «chuyển đổi phức tạp quá» là lý do giữ nguyên — dù tính ra, chi phí duy trì phần mềm cũ cao hơn chi phí chuyển đổi mỗi năm.",
+takeaway:"Khi thấy mình đang bảo vệ hiện trạng, hỏi: <strong>«Nếu hôm nay bắt đầu từ đầu không có ràng buộc nào, tôi có chọn điều này không?»</strong> Không hành động cũng là một lựa chọn cần được đánh giá như các lựa chọn khác."},
+
+{cat:"thienkien",vi:"Thiên kiến nhóm và bầy đàn",en:"Herding / Groupthink",
+short:"Xu hướng đi theo số đông hoặc đồng nhất với ý kiến nhóm thay vì tư duy độc lập — <strong>tư duy bầy đàn (herding)</strong> và <strong>tư duy nhóm (groupthink)</strong> là hai biểu hiện của hiện tượng này.",
+detail:"Irving Janis nghiên cứu groupthink từ các sự kiện lịch sử thảm họa (vụ xâm lược Vịnh Con Heo, thảm họa Challenger): các nhóm gắn kết cao có xu hướng đồng thuận nhanh, né tránh bất đồng và tự kiểm duyệt. Dấu hiệu groupthink: áp lực lên người không đồng ý, ảo tưởng về đồng thuận, ảo tưởng không thể sai. <strong>Herding</strong> khác groupthink: không cần nhóm — chỉ cần biết người khác đang làm gì. Vấn đề: thông tin dựa trên hành vi người trước không tạo ra thông tin mới — chỉ khuếch đại tín hiệu ban đầu. Biện pháp: <strong>«Advocatus Diaboli» (devil's advocate)</strong>, thu thập ý kiến ẩn danh, tách biệt ý kiến trước khi thảo luận nhóm.",
+example:"Trong bong bóng dot-com: mỗi nhà đầu tư nghĩ người khác có thông tin tốt hơn, nên đi theo — tạo ra vòng lặp tự củng cố đưa định giá lên vô lý. Tương tự: mọi người xếp hàng trước một nhà hàng không vì biết đồ ăn ngon, mà vì thấy người khác xếp hàng.",
+takeaway:"Trước khi thảo luận nhóm về quyết định quan trọng, <strong>yêu cầu mỗi người viết đánh giá độc lập trước</strong>. Chỉ định một «devil's advocate» có nhiệm vụ phản bác mọi phương án — không phải để phá, mà để kiểm tra chặt chẽ."},
+
+{cat:"thienkien",vi:"Lý thuyết triển vọng và ác cảm mất mát",en:"Prospect Theory and Loss Aversion",
+short:"<strong>Lý thuyết triển vọng (prospect theory)</strong> của Kahneman & Tversky: mất 100.000đ đau hơn lời 100.000đ khoảng 2-2,5 lần. Đây là nền tảng giải thích hàng chục thiên kiến khác.",
+detail:"Prospect theory thay thế lý thuyết tiện ích kỳ vọng (expected utility theory) truyền thống và giải thích được hành vi thực tế của con người. Hai đặc điểm chính: (1) <strong>Loss aversion (ác cảm mất mát)</strong> — thua cuộc đau hơn thắng cuộc vui, theo tỷ lệ ~2:1 đến 2,5:1; (2) <strong>Diminishing sensitivity</strong> — sự khác biệt giữa mất 100.000đ và 200.000đ cảm giác lớn hơn khác biệt giữa mất 1 triệu và 1,1 triệu. Hệ quả quyết định: người ta <strong>chấp nhận rủi ro cao hơn để tránh mất mát</strong> so với tìm kiếm lợi nhuận tương đương (điều này giải thích tại sao nhà đầu tư giữ cổ phiếu lỗ quá lâu và bán cổ phiếu lời quá sớm).",
+example:"Cho nhân viên một khoản tiền thưởng 5 triệu trước và nói sẽ lấy lại nếu không đạt KPI — nhân viên làm việc tốt hơn so với hứa thưởng 5 triệu nếu đạt KPI, dù giá trị tài chính như nhau. Loss aversion làm việc đầu tiên mạnh hơn.",
+takeaway:"Nhận ra <strong>loss aversion đang chi phối quyết định</strong> khi bạn từ chối cơ hội tốt vì sợ rủi ro nhỏ, hoặc tiếp tục khoản đầu tư thua lỗ để «tránh lỗ thật sự». Hỏi: <strong>«Nếu đây là lời lãi chứ không phải mất mát, tôi có quyết định khác không?»</strong>"},
+
+// ===== 3. KHUNG & ĐỊNH NGHĨA VẤN ĐỀ =====
+{cat:"khung",vi:"Định nghĩa vấn đề",en:"Problem Definition",
+short:"Hầu hết quyết định tệ đến từ việc giải sai vấn đề — <strong>định nghĩa vấn đề (problem definition)</strong> chính xác là bước quan trọng nhất, thường bị bỏ qua khi mọi người vội vàng tìm giải pháp.",
+detail:"John Dewey: <strong>«Vấn đề được định nghĩa tốt là vấn đề được giải phân nửa.»</strong> Lỗi phổ biến trong định nghĩa vấn đề: (1) <strong>Mô tả triệu chứng thay vì vấn đề gốc</strong> — «doanh số giảm» là triệu chứng, không phải vấn đề; (2) <strong>Giải pháp được ngụ ý trong định nghĩa</strong> — «làm sao chúng ta có thể tăng quảng cáo để tăng doanh số?» đã loại bỏ mọi giải pháp không liên quan đến quảng cáo; (3) <strong>Phạm vi quá hẹp hoặc quá rộng</strong>. Công cụ: <strong>«5 Whys» (5 lần hỏi Tại sao)</strong> để đào sâu đến gốc rễ; <strong>«How Might We» (HMW)</strong> để mở rộng không gian giải pháp; tái định nghĩa bằng góc nhìn khác.",
+example:"Vấn đề ban đầu: «Thang máy quá chậm». Giải pháp hiển nhiên: nâng cấp động cơ (tốn kém). Sau 5 Whys: vấn đề thực là «người đợi cảm thấy mất thời gian». Giải pháp mới: lắp gương và màn hình TV ở khu vực đợi — chi phí thấp hơn 10 lần, khiếu nại giảm hoàn toàn.",
+takeaway:"Dành <strong>ít nhất 30% thời gian ra quyết định</strong> để định nghĩa lại vấn đề. Hỏi 5 lần «Tại sao» để tìm gốc rễ. Thử định nghĩa lại vấn đề theo ít nhất 3 góc nhìn khác nhau trước khi tìm giải pháp."},
+
+{cat:"khung",vi:"Tái đóng khung vấn đề",en:"Problem Reframing",
+short:"<strong>Tái đóng khung (reframing)</strong> là thay đổi cách nhìn về một vấn đề — thường giúp khám phá ra giải pháp hoàn toàn mới mà khung ban đầu không thể thấy. Khung quyết định không gian giải pháp.",
+detail:"Mỗi cách định nghĩa vấn đề là một «khung» — và khung đó vừa mở ra vừa đóng lại những hướng giải pháp nhất định. Các kỹ thuật tái đóng khung: (1) <strong>Đảo ngược (inversion)</strong> — thay vì «làm sao để tăng khách hàng», hỏi «làm sao để không mất khách hàng?»; (2) <strong>Phóng to/Thu nhỏ</strong> — thay đổi quy mô vấn đề; (3) <strong>Đổi góc nhìn</strong> — nhìn từ góc nhìn khách hàng, đối thủ, cộng đồng; (4) <strong>Thay đổi mục tiêu</strong> — vấn đề thực sự đang giải là gì? Munger và Buffett nổi tiếng dùng inversion: «nghĩ về điều tệ nhất có thể xảy ra» thay vì «điều tốt nhất».",
+example:"Apple reframe: thay vì «làm sao cải thiện máy nghe nhạc», họ hỏi «làm sao đặt 1000 bài hát vào túi bạn?». Uber reframe: thay vì «làm sao cải thiện dịch vụ taxi», họ hỏi «làm sao kết nối người cần đi và người có xe?»",
+takeaway:"Khi bế tắc với một vấn đề, <strong>viết lại định nghĩa vấn đề theo 3 cách khác nhau</strong>. Dùng inversion: «điều gì chắc chắn sẽ khiến vấn đề tệ hơn?» — tránh những điều đó chính là bước giải quyết."},
+
+{cat:"khung",vi:"Nguyên lý đầu tiên",en:"First Principles Thinking",
+short:"Phá vỡ vấn đề xuống các sự thật cơ bản nhất không thể tranh cãi (<strong>first principles</strong>), rồi xây dựng lại từ đó — thay vì suy nghĩ bằng cách tương tự (<strong>reasoning by analogy</strong>).",
+detail:"Elon Musk phổ biến khái niệm này: khi được hỏi tại sao không dùng pin sẵn có cho xe điện, ông phân tích: «Hộp pin là sắt, niken, nhôm, đồng và polyme. Nếu mua từng vật liệu trên thị trường hàng hóa và kết hợp theo cách thông minh, hộp pin sẽ không đắt đến vậy.» Kết quả: Tesla giảm giá pin từ 600/kWh xuống <200/kWh. Reasoning by analogy: «pin luôn đắt vì đó là lịch sử» — nhanh hơn nhưng giới hạn trong không gian đã có. First principles: chậm hơn, cần nhiều công sức nhưng có thể phát hiện điều không ai từng thấy. Áp dụng: <strong>phân biệt giữa constraint thực (vật lý, pháp lý) và constraint giả định (thói quen, lịch sử)</strong>.",
+example:"Người khởi nghiệp hỏi «tại sao vận chuyển hàng không tốn kém vậy?» thay vì «làm sao giảm phí ship?». Sau khi phân tích từ đầu: chi phí chủ yếu đến từ chi phí nhân công, không phải nhiên liệu hay máy bay. Giải pháp: tự động hóa kho hàng.",
+takeaway:"Khi đối diện với giả định «luôn làm thế này», hỏi: <strong>«Tại sao? Điều gì thực sự bắt buộc điều này, và điều gì chỉ là thói quen?»</strong> Phân biệt <strong>ràng buộc thực</strong> (physical, legal) và <strong>ràng buộc giả định</strong> (historical, conventional)."},
+
+{cat:"khung",vi:"Tư duy đảo ngược",en:"Inversion Thinking",
+short:"Thay vì hỏi «làm sao để thành công», hỏi <strong>«làm sao để thất bại chắc chắn nhất?»</strong> — rồi tránh những điều đó. Munger: <strong>«Đảo ngược, luôn đảo ngược.»</strong>",
+detail:"Nhà toán học Jacobi nổi tiếng với nguyên lý <strong>«man muss immer umkehren» (luôn đảo ngược)»</strong>. Munger áp dụng vào quản lý và đầu tư: thay vì chỉ hỏi «Berkshire Hathaway cần làm gì để thành công», ông hỏi «Berkshire Hathaway có thể bị phá hủy như thế nào?» và tập trung vào tránh điều đó. Inversion hiệu quả vì: (1) <strong>Dễ hình dung thất bại hơn thành công</strong>; (2) <strong>Tìm ra blind spots</strong> mà tư duy xuôi chiều bỏ qua; (3) <strong>Asymmetry</strong> — đôi khi tránh được thất bại quan trọng hơn đạt được thành công. Ứng dụng: <strong>«pre-mortem»</strong> — hình dung dự án đã thất bại và hỏi tại sao.",
+example:"Amazon kiểm tra sản phẩm mới bằng cách viết press release (thông cáo báo chí) ngày ra mắt TRƯỚC khi bắt đầu phát triển — bao gồm cả phần FAQ từ góc nhìn khách hàng thất vọng. Đây là inversion: hình dung kết quả và lý do thất bại trước.",
+takeaway:"Trước dự án quan trọng, <strong>thực hiện «pre-mortem»</strong>: tưởng tượng 1 năm sau dự án đã thất bại hoàn toàn, hỏi «Tại sao?» và liệt kê tất cả lý do. Dùng danh sách này để phòng ngừa ngay từ đầu."},
+
+{cat:"khung",vi:"Quyết định thuận chiều và nghịch chiều",en:"Reversible vs Irreversible Decisions",
+short:"Bezos phân loại quyết định thành <strong>«cửa một chiều» (one-way door)</strong> — không thể hoàn tác, cần thận trọng tối đa; và <strong>«cửa hai chiều» (two-way door)</strong> — có thể hoàn tác, nên quyết định nhanh và học từ thực tế.",
+detail:"Một trong những framework thực tiễn nhất của Bezos trong quản lý Amazon: hầu hết các quyết định là «cửa hai chiều» và bị quyết định quá chậm do quy trình phê duyệt nặng nề. Quyết định «cửa một chiều»: mua lại công ty, thay đổi chiến lược core, sa thải người — cần phân tích kỹ, đồng thuận rộng. Quyết định «cửa hai chiều»: thử nghiệm tính năng mới, thay đổi quy trình nhỏ, cách tiếp cận thị trường — nên ủy quyền và thực hiện nhanh. <strong>Lỗi phổ biến</strong>: áp dụng quy trình của «cửa một chiều» cho «cửa hai chiều» — làm chậm tổ chức mà không mang lại thêm chất lượng quyết định.",
+example:"Thay đổi màu nút trên website (reversible — xem analytics 2 tuần là biết ngay, có thể rollback) vs đóng cửa chi nhánh (irreversible — không thể đơn giản «mở lại như cũ»). Quyết định đầu: thực hiện ngay. Quyết định sau: cần 3-6 tháng phân tích.",
+takeaway:"Trước khi quyết định, hỏi: <strong>«Đây là cửa một chiều hay hai chiều?»</strong> Nếu hai chiều: quyết định nhanh, hành động, học từ thực tế. Nếu một chiều: dành thời gian và nguồn lực tương xứng với hậu quả không thể hoàn tác."},
+
+// ===== 4. THU THẬP & ĐÁNH GIÁ THÔNG TIN =====
+{cat:"thongtin",vi:"Tư duy Bayes",en:"Bayesian Thinking",
+short:"Cập nhật niềm tin một cách hợp lý khi có thông tin mới — thay vì cứng nhắc giữ quan điểm ban đầu hoặc thay đổi hoàn toàn theo thông tin mới nhất. <strong>Tư duy Bayes (Bayesian thinking)</strong> là nghệ thuật cập nhật đúng mức.",
+detail:"Định lý Bayes: P(A|B) = P(B|A) × P(A) / P(B). Nhưng quan trọng hơn công thức là <strong>tinh thần Bayes</strong>: (1) Bắt đầu với <strong>prior belief</strong> — niềm tin ban đầu dựa trên tất cả thông tin đã có; (2) Khi có bằng chứng mới, cập nhật niềm tin theo sức mạnh của bằng chứng đó; (3) <strong>Posterior belief</strong> mới này trở thành prior cho lần cập nhật tiếp theo. Hai lỗi phổ biến: <strong>không cập nhật đủ</strong> (anchoring quá mạnh vào prior) và <strong>cập nhật quá nhiều</strong> (quá nhạy cảm với bằng chứng mới). Người tư duy tốt nói: «Tôi 70% tin X, đây là bằng chứng mới, nên tôi cập nhật lên 80%» — không phải «chắc chắn X» hay «thay đổi hoàn toàn».",
+example:"Trước kết quả thử nghiệm thuốc: 60% tin thuốc hiệu quả (prior). Thử nghiệm pha 2 cho kết quả tích cực nhưng mẫu nhỏ: cập nhật lên 75% (posterior — không thay đổi hoàn toàn thành 100%). Thử nghiệm pha 3 quy mô lớn cho kết quả tiêu cực: cập nhật xuống 20%.",
+takeaway:"Diễn đạt niềm tin bằng <strong>xác suất, không phải nhị phân</strong>. Khi nghe thông tin mới, hỏi: <strong>«Bằng chứng này mạnh đến đâu? Nó nên làm thay đổi niềm tin của tôi bao nhiêu điểm phần trăm?»</strong>"},
+
+{cat:"thongtin",vi:"Phân biệt dữ liệu, thông tin và tri thức",en:"Data, Information and Knowledge",
+short:"<strong>Dữ liệu (data)</strong> là sự kiện thô. <strong>Thông tin (information)</strong> là dữ liệu có ngữ cảnh. <strong>Tri thức (knowledge)</strong> là thông tin kết hợp với hiểu biết để ra quyết định. Nhiều người ra quyết định dựa trên dữ liệu mà thiếu tri thức.",
+detail:"Trong kỷ nguyên thông tin, chúng ta bị ngập trong <strong>dữ liệu</strong> nhưng đói <strong>tri thức</strong>. Dữ liệu không phải tự nhiên thành quyết định tốt — cần: (1) <strong>Ngữ cảnh</strong> — dữ liệu này ý nghĩa gì trong bối cảnh cụ thể; (2) <strong>So sánh</strong> — so với cái gì (benchmark, trend, base rate); (3) <strong>Nhân quả</strong> — điều gì tạo ra dữ liệu này; (4) <strong>Độ tin cậy</strong> — nguồn gốc và phương pháp thu thập. <strong>Analysis paralysis</strong> — tê liệt vì quá nhiều dữ liệu — xảy ra khi người ta thu thập nhiều hơn cần thiết thay vì xác định trước câu hỏi quyết định cụ thể.",
+example:"Doanh số giảm 15% (dữ liệu). Trong ngữ cảnh toàn ngành giảm 25% (thông tin): thực ra thị phần tăng. Với tri thức thêm về chu kỳ kinh tế và hành vi khách hàng: quyết định đúng là đầu tư marketing, không cắt giảm.",
+takeaway:"Trước khi thu thập dữ liệu, xác định rõ: <strong>«Câu hỏi quyết định của tôi là gì? Thông tin nào đủ để trả lời câu hỏi đó?»</strong> Tránh thu thập dữ liệu chỉ vì có thể thu thập."},
+
+{cat:"thongtin",vi:"Tín hiệu và Nhiễu",en:"Signal vs. Noise",
+short:"Trong biển dữ liệu, <strong>tín hiệu (signal)</strong> là thông tin thực sự liên quan đến quyết định; <strong>nhiễu (noise)</strong> là biến động ngẫu nhiên không có ý nghĩa. Người ra quyết định giỏi biết lọc tín hiệu từ nhiễu.",
+detail:"Nate Silver — nhà thống kê nổi tiếng cuốn «The Signal and the Noise» — chỉ ra: hầu hết dự đoán và phân tích thất bại vì không phân biệt được hai loại. Noise không phải tự nhiên biến mất khi có nhiều dữ liệu hơn — thực ra <strong>nhiều dữ liệu có thể có nhiều noise hơn</strong>. Nguyên tắc Occam's Razor áp dụng: mô hình đơn giản hơn (ít biến, ít phức tạp) thường dự đoán tốt hơn mô hình phức tạp trên dữ liệu thực tế, dù kém hơn trên dữ liệu training (overfitting). Nhận biết noise vs signal: <strong>noise thường nhất quán, ngẫu nhiên; signal có pattern và predictive power</strong>.",
+example:"Nhà đầu tư kiểm tra giá cổ phiếu mỗi giờ: phần lớn là noise — biến động ngẫu nhiên trong ngắn hạn. Kiểm tra mỗi quý: nhiều signal hơn về sức khỏe dài hạn của doanh nghiệp. Càng nhìn ngắn hạn càng thấy nhiều noise hơn signal.",
+takeaway:"Xác định trước <strong>«leading indicators»</strong> thực sự dự đoán kết quả bạn quan tâm. Đặt tần suất đo lường phù hợp — đo quá thường xuyên thường tăng noise mà không tăng signal. Hỏi: <strong>«Thông tin này có thực sự thay đổi quyết định của tôi không?»</strong>"},
+
+{cat:"thongtin",vi:"Đặt câu hỏi đúng",en:"Asking the Right Questions",
+short:"Chất lượng câu hỏi quyết định chất lượng câu trả lời và quyết định. <strong>Câu hỏi đóng</strong> giới hạn lựa chọn; <strong>câu hỏi mở</strong> mở rộng khả năng; câu hỏi <strong>sai</strong> dẫn đến câu trả lời đúng cho vấn đề sai.",
+detail:"Peter Drucker: <strong>«Nguy hiểm nhất là đặt câu hỏi sai, vì sẽ cho ra câu trả lời đúng cho câu hỏi đó.»</strong> Các loại câu hỏi mạnh trong ra quyết định: (1) <strong>Câu hỏi giả thuyết</strong> — «điều gì phải đúng để đây là quyết định tốt?»; (2) <strong>Câu hỏi đảo ngược</strong> — «điều gì có thể làm điều này thất bại?»; (3) <strong>Câu hỏi về assumption</strong> — «giả định nào tôi đang ngầm mang theo?»; (4) <strong>Câu hỏi về mục tiêu ẩn</strong> — «quyết định này thực sự phục vụ mục tiêu gì?». Phỏng vấn chẩn đoán: y học có «red flags» — câu hỏi không chẩn đoán mà loại trừ những điều nguy hiểm nhất.",
+example:"Thay vì hỏi «Chúng ta có nên ra mắt sản phẩm X vào Q3 không?» (đóng khung, giả định đã quyết định thời gian), hỏi «Điều gì phải đúng để ra mắt Q3 là quyết định đúng? Điều gì có thể sai?»",
+takeaway:"Trước khi trả lời bất kỳ câu hỏi quan trọng nào, dành thời gian <strong>kiểm tra xem câu hỏi có được đặt đúng chưa</strong>. Hỏi: <strong>«Giả định nào đang được nhúng trong câu hỏi này?»</strong>"},
+
+{cat:"thongtin",vi:"Phân tích tình huống và kịch bản",en:"Scenario Analysis",
+short:"Thay vì dự đoán một tương lai duy nhất, xây dựng <strong>nhiều kịch bản (scenarios)</strong> — tốt nhất, xấu nhất và thực tế nhất — để chuẩn bị cho sự bất định và kiểm tra độ bền của quyết định.",
+detail:"Scenario analysis được Shell dùng từ những năm 1970 để chuẩn bị cho cú sốc dầu mỏ — và đây là lý do Shell vượt qua cuộc khủng hoảng tốt hơn nhiều đối thủ. Nguyên tắc: (1) <strong>Không dự đoán — chuẩn bị</strong>: mục tiêu không phải là đoán đúng kịch bản nào xảy ra, mà là không bị bất ngờ hoàn toàn bởi bất kỳ kịch bản nào; (2) <strong>Identify «robust decisions»</strong> — quyết định hoạt động tốt trong nhiều kịch bản; (3) <strong>Pre-mortems</strong> cho từng kịch bản xấu. Khác với <strong>sensitivity analysis</strong> (thay đổi một biến): scenario analysis thay đổi nhiều biến cùng lúc theo một story logic nhất quán.",
+example:"Startup chuẩn bị 3 kịch bản cho 18 tháng tới: (A) Thị trường tăng trưởng như kỳ vọng — cần thêm vốn và tuyển dụng; (B) Suy thoái nhẹ — cắt giảm chi phí không cốt lõi, tập trung vào retention; (C) Suy thoái sâu — pivot sang phân khúc khách hàng không nhạy cảm với kinh tế. Quyết định «robust»: duy trì cashflow đủ cho ít nhất kịch bản B.",
+takeaway:"Trước quyết định quan trọng với nhiều bất định, <strong>xây dựng ít nhất 3 kịch bản</strong>: optimistic, realistic, pessimistic. Hỏi: <strong>«Quyết định nào hoạt động tốt trong cả 3 kịch bản?»</strong> — đó là quyết định robust nhất."},
+
+// ===== 5. MÔ HÌNH & CÔNG CỤ PHÂN TÍCH =====
+{cat:"congcu",vi:"Phân tích chi phí – lợi ích",en:"Cost-Benefit Analysis",
+short:"So sánh có hệ thống tất cả chi phí và lợi ích của một quyết định — bao gồm cả <strong>chi phí cơ hội</strong>, <strong>chi phí ẩn</strong> và <strong>lợi ích vô hình</strong> — để đánh giá liệu quyết định có tạo ra giá trị ròng dương.",
+detail:"CBA đúng chuẩn cần: (1) <strong>Liệt kê đầy đủ</strong> — không chỉ chi phí tiền mặt mà cả thời gian, rủi ro, chi phí cơ hội; (2) <strong>Quy về một đơn vị</strong> — thường là tiền hoặc thời gian; (3) <strong>Tính theo thời gian</strong> — tiền hôm nay khác tiền năm sau (<strong>discounting</strong>); (4) <strong>Phân tích độ nhạy</strong> — kết quả thay đổi thế nào nếu giả định thay đổi. Lỗi phổ biến: (1) Quên chi phí ẩn (switching costs, learning curve); (2) Đánh giá lợi ích thái quá do optimism bias; (3) Không tính chi phí cơ hội. <strong>Bên cạnh CBA</strong>: phân tích định tính — giá trị không đo được bằng tiền (văn hóa, thương hiệu, mối quan hệ).",
+example:"Quyết định tự xây phần mềm hay mua giải pháp sẵn có: CBA thường cho thấy chi phí thực của tự xây cao hơn gấp 3-5 lần dự tính ban đầu khi tính đủ: chi phí maintain, upgrade, onboarding mỗi nhân viên mới, opportunity cost của team engineering làm việc khác.",
+takeaway:"Khi làm CBA, hỏi ba lần: <strong>«Tôi đã bỏ sót chi phí nào?»</strong> Đặc biệt tìm: chi phí thời gian của người liên quan, chi phí chuyển đổi, chi phí cơ hội, và rủi ro ẩn."},
+
+{cat:"congcu",vi:"Ma trận 2×2 quyết định",en:"Decision Matrix",
+short:"So sánh nhiều lựa chọn dựa trên nhiều tiêu chí có <strong>trọng số (weighted criteria)</strong> — cấu trúc hóa quyết định phức tạp thành một bảng so sánh minh bạch, giảm ảnh hưởng của cảm tính.",
+detail:"Decision matrix (còn gọi là Weighted Scoring Matrix hay Pugh Matrix) đặc biệt hữu ích khi: (1) Nhiều lựa chọn thay thế; (2) Nhiều tiêu chí đánh giá quan trọng và đánh đổi nhau; (3) Cần quyết định nhóm minh bạch. Quy trình: (1) <strong>Liệt kê tiêu chí</strong> và gán trọng số theo mức độ quan trọng; (2) Chấm điểm từng lựa chọn theo từng tiêu chí; (3) Tính điểm tổng có trọng số; (4) <strong>Thảo luận và điều chỉnh</strong> — số liệu là công cụ tư duy, không phải quyết định cuối. Giới hạn: chất lượng kết quả phụ thuộc vào chất lượng tiêu chí và trọng số đầu vào.",
+example:"Tuyển chọn nhà cung cấp phần mềm: 4 tiêu chí (giá cả 25%, chức năng 35%, hỗ trợ kỹ thuật 25%, khả năng mở rộng 15%). 3 ứng viên được chấm điểm 1-10 theo từng tiêu chí. Kết quả: nhà cung cấp B điểm cao nhất dù giá không rẻ nhất — và team đồng thuận vì quá trình minh bạch.",
+takeaway:"Dùng decision matrix không phải để «tính toán ra quyết định» mà để <strong>cấu trúc hóa tư duy</strong>. Điều quan trọng là đồng thuận về tiêu chí và trọng số — đây thường là cuộc thảo luận có giá trị nhất, không phải điểm số cuối."},
+
+{cat:"congcu",vi:"Cây quyết định",en:"Decision Tree",
+short:"Biểu đồ hình cây mô phỏng các lựa chọn, kết quả có thể, xác suất và giá trị — giúp tính toán <strong>giá trị kỳ vọng (expected value)</strong> của từng con đường quyết định và đánh giá quyết định dưới bất định.",
+detail:"Cây quyết định gồm: (1) <strong>Decision nodes (nút quyết định)</strong> — điểm bạn chọn; (2) <strong>Chance nodes (nút ngẫu nhiên)</strong> — điểm xác suất quyết định; (3) <strong>Terminal nodes (nút kết quả)</strong> — giá trị cuối. Giá trị kỳ vọng = Σ(xác suất × giá trị). Điểm mạnh: buộc phải ước tính xác suất và giá trị tường minh, phát hiện hidden dependencies, cho phép <strong>«roll back»</strong> — tính ngược từ kết quả. Giới hạn: độ chính xác phụ thuộc vào ước tính xác suất (thường uncertain) và giả định về independence giữa các sự kiện.",
+example:"Quyết định có nên mua bảo hiểm cho thiết bị 10 triệu: Không mua (xác suất hỏng 5% trong 1 năm): EV = -10m × 5% = -500.000đ. Mua bảo hiểm (phí 400.000đ/năm): EV = -400.000đ chắc chắn. Về toán học: không mua tốt hơn. Nhưng nếu không thể chịu thiệt hại 10 triệu: mua là hợp lý dù EV âm hơn.",
+takeaway:"Dùng cây quyết định để <strong>buộc bản thân ước tính xác suất tường minh</strong>. Quan trọng hơn kết quả số học là quá trình: phát hiện bạn đang thiếu thông tin ở nút nào và quyết định nào thực sự là «critical path»."},
+
+{cat:"congcu",vi:"Phân tích độ nhạy",en:"Sensitivity Analysis",
+short:"Kiểm tra xem <strong>quyết định thay đổi như thế nào khi các giả định thay đổi</strong> — phát hiện giả định nào «quan trọng nhất» và đánh giá độ bền (robustness) của quyết định.",
+detail:"Trong mọi mô hình phân tích, có những biến số không chắc chắn. Sensitivity analysis hỏi: <strong>«Nếu con số này sai 20%, quyết định có thay đổi không?»</strong> Phân loại: (1) <strong>Deterministic sensitivity</strong> — thay đổi một biến tại một thời điểm; (2) <strong>Monte Carlo simulation</strong> — thay đổi nhiều biến ngẫu nhiên đồng thời, tạo phân phối kết quả. Phát hiện quan trọng: thường 80-90% kết quả chỉ nhạy cảm với 2-3 biến số chính. Đây là điểm cần đầu tư vào nghiên cứu thêm, không phải cải thiện độ chính xác của mọi giả định.",
+example:"Mô hình tài chính của startup có 20 giả định. Sensitivity analysis cho thấy: chỉ 2 biến (tỷ lệ chuyển đổi free-to-paid và customer acquisition cost) quyết định 90% sự khác biệt giữa thành công và thất bại. Team tập trung vào A/B test hai biến này thay vì phân tích đều 20 biến.",
+takeaway:"Sau khi xây mô hình quyết định, <strong>thử thay đổi từng giả định ±20%</strong>. Tập trung nguồn lực nghiên cứu vào 2-3 biến mà quyết định nhạy cảm nhất. <strong>Quyết định tốt nhất là quyết định robust với nhiều giá trị giả định, không chỉ với giá trị «trung bình kỳ vọng».</strong>"},
+
+{cat:"congcu",vi:"Phân tích Pareto và quy tắc 80/20",en:"Pareto Analysis / 80-20 Rule",
+short:"<strong>Nguyên lý Pareto (80/20)</strong>: ~80% kết quả đến từ ~20% nguyên nhân — trong ra quyết định, tập trung vào thiểu số yếu tố tạo ra đa số tác động thay vì phân tán đều nguồn lực.",
+detail:"Vilfredo Pareto quan sát 80% đất đai Italy thuộc 20% dân số (1896). Nguyên lý này xuất hiện ở mọi nơi: 20% khách hàng tạo 80% doanh thu; 20% bugs gây 80% crashes; 20% quyết định ảnh hưởng 80% kết quả. Trong ra quyết định: (1) <strong>Pareto của vấn đề</strong> — tập trung giải 20% nguyên nhân gây 80% vấn đề; (2) <strong>Pareto của thông tin</strong> — 20% thông tin quan trọng nhất để ra quyết định; (3) <strong>Pareto của hành động</strong> — 20% hành động tạo 80% giá trị. Cạm bẫy: áp dụng cứng nhắc — trong một số lĩnh vực (an toàn, compliance), 20% «ít quan trọng» không thể bỏ qua.",
+example:"Sau khi phân tích 50 nguồn complaint của khách hàng, team phát hiện 3 nguyên nhân chiếm 78% toàn bộ complaints. Thay vì cố gắng xử lý tất cả 50 nguyên nhân, tập trung vào 3 nguyên nhân đó trong Q1. Kết quả: giảm 75% tổng complaints chỉ bằng 30% nguồn lực.",
+takeaway:"Với mọi vấn đề hoặc tập hợp hành động, <strong>xếp hạng theo tác động và hỏi «20% nào tạo ra 80% kết quả?»</strong> Ưu tiên triệt để thay vì dàn trải đều. Đây là phân bổ nguồn lực, không phải bỏ qua những gì còn lại."},
+
+{cat:"congcu",vi:"Phân tích SWOT",en:"SWOT Analysis",
+short:"Framework đánh giá <strong>Strengths (điểm mạnh), Weaknesses (điểm yếu), Opportunities (cơ hội), Threats (nguy cơ)</strong> — công cụ phổ biến nhất trong chiến lược, nhưng thường bị dùng sai.",
+detail:"SWOT được dùng đúng không chỉ là «liệt kê 4 ô» mà là tạo ra <strong>strategic insights</strong> từ sự giao thoa: (1) <strong>SO strategies</strong> — dùng điểm mạnh để tận dụng cơ hội; (2) <strong>WO strategies</strong> — khắc phục điểm yếu để nắm cơ hội; (3) <strong>ST strategies</strong> — dùng điểm mạnh để phòng ngừa nguy cơ; (4) <strong>WT strategies</strong> — giảm thiểu điểm yếu và nguy cơ. Vấn đề thường gặp: (1) Liệt kê quá dài và không phân biệt quan trọng/không quan trọng; (2) Thiên về nội bộ (SW) và bỏ qua bên ngoài (OT); (3) Không dẫn đến action cụ thể; (4) Thiếu <strong>evidence</strong> cho từng điểm — S/W/O/T phải dựa trên data, không phải cảm giác.",
+example:"SWOT cho quyết định ra mắt sản phẩm mới vào ASEAN: Strength (brand mạnh tại VN), Weakness (chưa có local team), Opportunity (thị trường E-commerce ASEAN tăng 30%/năm), Threat (cạnh tranh từ Shopee/Lazada). Insight từ SO: dùng brand VN để thâm nhập Đông Nam Á — thay vì xây từ đầu.",
+takeaway:"Khi dùng SWOT, <strong>giới hạn 3-5 điểm mỗi ô</strong> (ít hơn, quan trọng hơn), mỗi điểm phải có evidence cụ thể, và kết thúc bằng <strong>ít nhất 3 action items</strong> từ phân tích SO/WO/ST/WT."},
+
+// ===== 6. RỦI RO & BẤT ĐỊNH =====
+{cat:"ruiro",vi:"Đánh giá rủi ro",en:"Risk Assessment",
+short:"Đánh giá rủi ro đúng đắn không chỉ là liệt kê điều có thể sai — mà là ước tính có hệ thống <strong>xác suất</strong> và <strong>tác động</strong> của từng rủi ro, ưu tiên theo ma trận xác suất-tác động.",
+detail:"Ma trận rủi ro: trục X là xác suất (Cao/Thấp), trục Y là tác động (Cao/Thấp). Bốn ô: (1) Xác suất cao, tác động cao: <strong>Avoid/Mitigate</strong> — ưu tiên cao nhất; (2) Xác suất thấp, tác động cao: <strong>Transfer/Insure</strong> — mua bảo hiểm hoặc contingency plan; (3) Xác suất cao, tác động thấp: <strong>Accept/Monitor</strong>; (4) Xác suất thấp, tác động thấp: <strong>Accept and ignore</strong>. Lỗi phổ biến: (1) Chỉ liệt kê rủi ro mà không ước tính; (2) <strong>Overconfidence</strong> — đánh giá xác suất thấp hơn thực tế; (3) Tập trung quá vào rủi ro dễ hình dung (<strong>availability bias</strong>); (4) Bỏ qua <strong>tail risks</strong> — sự kiện xác suất thấp nhưng tác động thảm khốc.",
+example:"Dự án xây dựng: Rủi ro trễ hạn (xác suất 60%, tác động trung bình) — cần buffer time. Rủi ro nhà thầu phá sản (xác suất 5%, tác động rất cao) — cần performance bond và nhà thầu dự phòng. Không phân biệt rõ hai loại này dẫn đến tập trung sai nguồn lực.",
+takeaway:"Với mỗi rủi ro, ước tính cả <strong>xác suất lẫn tác động</strong> (không chỉ một cái). Đặc biệt chú ý đến <strong>tail risks</strong> — xác suất thấp nhưng tác động có thể phá hủy: xây kế hoạch ứng phó dù xác suất nhỏ, vì hậu quả không thể chấp nhận được."},
+
+{cat:"ruiro",vi:"Thiên nga đen và đuôi dày",en:"Black Swan and Fat Tails",
+short:"<strong>Thiên nga đen (black swan)</strong> của Nassim Taleb: sự kiện hiếm gặp, không thể dự đoán từ lịch sử, có tác động cực lớn. <strong>Đuôi dày (fat tails)</strong>: phân phối thực tế có nhiều sự kiện cực đoan hơn phân phối chuẩn dự đoán.",
+detail:"Trước khi người châu Âu đến Úc, tất cả thiên nga họ biết đều trắng — «thiên nga trắng» là hiển nhiên. Một con thiên nga đen đã phá vỡ toàn bộ niềm tin đó. Taleb: phần lớn thiệt hại kinh tế và thảm họa lịch sử là do các sự kiện «thiên nga đen» — mà các mô hình rủi ro chuẩn không tính đến. Nguyên nhân: (1) <strong>Dữ liệu lịch sử không đại diện</strong> — những sự kiện chưa từng xảy ra vẫn có thể xảy ra; (2) <strong>Mô hình Gaussian</strong> (phân phối chuẩn) đánh giá thấp xác suất sự kiện cực đoan. Chiến lược ứng phó: <strong>«barbell strategy»</strong> — cực kỳ an toàn ở phần lớn danh mục, nhưng chấp nhận rủi ro lớn ở phần nhỏ; giảm <strong>fragility</strong> và tăng <strong>optionality</strong>.",
+example:"Cuộc khủng hoảng tài chính 2008: các mô hình rủi ro của ngân hàng đánh giá xác suất «scenario đó» là 1 trong 10.000 năm — dù thực tế nó đã xảy ra. Covid-19: không ai có trong «risk register» của hầu hết tổ chức năm 2019.",
+takeaway:"Xây dựng <strong>hệ thống «antifragile»</strong> — không cần dự đoán đúng kịch bản thảm họa, chỉ cần đảm bảo có thể sống sót qua bất kỳ cú sốc lớn nào. Hỏi: <strong>«Nếu điều tôi không ngờ tới nhất xảy ra, hậu quả có thể chấp nhận không?»</strong>"},
+
+{cat:"ruiro",vi:"Phòng ngừa rủi ro và biên an toàn",en:"Risk Mitigation and Margin of Safety",
+short:"<strong>Biên an toàn (margin of safety)</strong> của Benjamin Graham: mua tài sản khi giá thấp hơn giá trị thực sự — áp dụng rộng hơn là xây dựng đệm dự phòng để quyết định chịu đựng được sai số và bất ngờ.",
+detail:"Graham: <strong>«Margin of safety is the central concept of investment.»</strong> Nguyên lý này vượt ra ngoài đầu tư: trong kỹ thuật, cầu được thiết kế chịu tải gấp 3-5 lần mức tải tối đa dự kiến. Trong quyết định: (1) <strong>Budget buffer</strong> — tính thêm 30-50% vào estimate chi phí; (2) <strong>Time buffer</strong> — lên kế hoạch xong sớm hơn deadline thực; (3) <strong>Optionality</strong> — giữ lại lựa chọn thay vì cam kết sớm; (4) <strong>Reversibility</strong> — ưu tiên quyết định có thể hoàn tác. Biên an toàn không loại bỏ rủi ro mà tạo ra <strong>room to be wrong</strong> — mà ai cũng sẽ sai đôi khi.",
+example:"Dự án phần mềm: PM báo cáo deadline 3 tháng. «Thực tế đáng tin cậy» với margin of safety 50%: 4,5 tháng. Nếu mọi thứ diễn ra suôn sẻ, xong sớm — khách hàng vui. Nếu có vấn đề (base rate cho IT projects: >60% trễ hơn dự kiến), vẫn trong margin.",
+takeaway:"Với mọi ước tính quan trọng, <strong>thêm ít nhất 30-50% buffer</strong>. Đặc biệt với deadline và budget — tự hỏi: <strong>«Nếu 3 điều sai đồng thời, quyết định này còn chịu đựng được không?»</strong>"},
+
+{cat:"ruiro",vi:"Giá trị kỳ vọng và Kelly Criterion",en:"Expected Value and Kelly Criterion",
+short:"<strong>Giá trị kỳ vọng (Expected Value)</strong> = Σ(xác suất × kết quả) là nền tảng của quyết định dưới bất định. <strong>Kelly Criterion</strong> tối ưu hóa cỡ vị thế để tối đa hóa tăng trưởng dài hạn.",
+detail:"EV = P(thắng) × Lợi nhuận − P(thua) × Thiệt hại. Tư duy EV: ra quyết định dựa trên giá trị kỳ vọng dài hạn, không phải kết quả của từng lần. Giới hạn của EV thuần túy: không tính đến <strong>risk aversion</strong> (ác cảm rủi ro) và <strong>ruin</strong> (phá sản). Kelly Criterion: kích thước đặt cược tối ưu = (P × b − q) / b, trong đó b = tỷ lệ lợi nhuận, P = xác suất thắng, q = 1-P. Kelly tối đa hóa logarithm của tài sản — tốt hơn EV thuần túy vì tránh được ruin. Thực tế: nhiều chuyên gia dùng <strong>«half Kelly»</strong> để an toàn hơn.",
+example:"Cơ hội đầu tư: 60% xác suất lời 2x, 40% mất trắng. EV = 0.6×2 − 0.4×1 = 0.8 (dương, nên làm). Kelly: đặt cọc tối đa 20% tổng tài sản (không phải 100% dù EV dương) — vì ruin là không thể phục hồi.",
+takeaway:"Tư duy EV: <strong>quyết định tốt không đảm bảo kết quả tốt — nhưng tư duy đúng về xác suất và giá trị sẽ thắng trong dài hạn</strong>. Kelly Criterion nhắc nhở: không bao giờ đặt cược số tiền mà thua sẽ «hủy hoại».",
+},
+
+{cat:"ruiro",vi:"Phân biệt rủi ro và bất định",en:"Risk vs. Uncertainty",
+short:"<strong>Rủi ro (risk)</strong>: không biết kết quả nhưng biết phân phối xác suất. <strong>Bất định (uncertainty)</strong> của Knight: không biết cả phân phối xác suất — không thể định lượng. Hai loại đòi hỏi chiến lược hoàn toàn khác nhau.",
+detail:"Frank Knight (1921) phân biệt: <strong>Risk</strong> — có thể tính toán (xúc xắc, bảo hiểm). <strong>Uncertainty</strong> — không thể tính toán (công nghệ đột phá, đại dịch, thay đổi chính trị). Lỗi phổ biến: áp dụng công cụ quản lý rủi ro (xác suất, EV) cho tình huống thực ra là bất định — tạo ra <strong>«false precision»</strong>. Chiến lược cho bất định: (1) <strong>Optionality</strong> — giữ nhiều lựa chọn mở; (2) <strong>Reversibility</strong> — ưu tiên quyết định có thể hoàn tác; (3) <strong>Robustness</strong> — tìm giải pháp hoạt động tốt trong nhiều kịch bản; (4) <strong>Learning speed</strong> — thiết kế để học nhanh từ bất định thực tế.",
+example:"Mở nhà hàng: rủi ro (dao động khách hàng, giá nguyên vật liệu — có historical data) vs bất định (đại dịch sẽ ảnh hưởng ngành F&B thế nào — không có precedent đủ). Chiến lược khác nhau: với rủi ro — hedge và insure; với bất định — giữ vốn lưu động cao, lease ngắn hạn, menu linh hoạt.",
+takeaway:"Trước khi ra quyết định, hỏi: <strong>«Đây là rủi ro (có data) hay bất định (không có data đáng tin)?»</strong> Nếu là bất định: ưu tiên <strong>optionality và reversibility</strong> hơn tối ưu hóa cho một kịch bản cụ thể."},// ===== 7. TƯ DUY HỆ THỐNG =====
+{cat:"hethong",vi:"Vòng phản hồi",en:"Feedback Loops",
+short:"<strong>Vòng phản hồi (feedback loops)</strong> là cơ chế mà đầu ra của một hệ thống quay lại ảnh hưởng đến đầu vào. Hiểu phản hồi là chìa khóa để ra quyết định đúng trong các hệ thống phức tạp.",
+detail:"Hai loại vòng phản hồi chính: (1) <strong>Vòng tăng cường (reinforcing loop)</strong> — đầu ra khuếch đại nguyên nhân, tạo tăng trưởng hoặc suy giảm theo cấp số nhân. Ví dụ: dân số tăng → sinh sản nhiều hơn → dân số tăng nhanh hơn. Trong kinh doanh: network effects, viral growth. (2) <strong>Vòng cân bằng (balancing loop)</strong> — đầu ra chống lại nguyên nhân, hướng hệ thống về một trạng thái cân bằng. Ví dụ: nhiệt độ tăng → điều hòa bật → nhiệt độ giảm. Lỗi phổ biến trong quyết định: can thiệp vào hệ thống mà không hiểu feedback structure — dẫn đến <strong>«policy resistance»</strong>: hành động với mục đích tốt nhưng gây hậu quả ngược lại.",
+example:"Một công ty cắt giảm R&D để tăng lợi nhuận ngắn hạn (reinforcing loop lợi nhuận). Nhưng R&D giảm → sản phẩm kém cạnh tranh hơn → doanh số giảm → lợi nhuận giảm (balancing loop dài hạn). Quyết định không nhìn đủ xa vào feedback structure đã tạo ra hậu quả ngược.",
+takeaway:"Trước khi can thiệp vào hệ thống phức tạp, vẽ sơ đồ <strong>feedback loops</strong> chính. Hỏi: <strong>«Hành động này sẽ tạo ra vòng phản hồi gì? Vòng tăng cường hay cân bằng? Trong bao lâu?»</strong>"},
+
+{cat:"hethong",vi:"Độ trễ hệ thống",en:"System Delays",
+short:"<strong>Độ trễ (delays)</strong> giữa nguyên nhân và hệ quả trong hệ thống phức tạp là nguồn gốc của nhiều quyết định sai lầm — người ra quyết định thấy tác động quá muộn và thường can thiệp quá nhiều hoặc quá ít.",
+detail:"Donella Meadows («Thinking in Systems»): delays tạo ra <strong>oscillation</strong> (dao động) trong hệ thống. Ví dụ kinh điển: vòi nước nóng với độ trễ — bạn mở to vì chưa thấy nóng, đột nhiên quá nóng rồi mở lạnh nhiều, lại quá lạnh — dao động liên tục vì không tính đến độ trễ. Trong kinh doanh: thuê nhân sự (vài tháng) → đào tạo hiệu quả (6-12 tháng) → tác động doanh thu (12-18 tháng). Quyết định không tính delay dẫn đến: <strong>undershoot và overshoot</strong> — làm quá ít rồi quá nhiều rồi lại quá ít. Biện pháp: xác định độ trễ quan trọng nhất trước khi quyết định, kiên nhẫn hơn với can thiệp.",
+example:"Chính phủ tăng lãi suất để kiềm chế lạm phát — nhưng tác động thực sự đến nền kinh tế mất 12-18 tháng. Nếu tiếp tục tăng mà không chờ, có thể tăng quá mức cần thiết, gây suy thoái không cần thiết.",
+takeaway:"Xác định <strong>«lag time»</strong> của hệ thống bạn đang ra quyết định. Đặc biệt: <strong>không đánh giá kết quả quyết định quá sớm</strong> (trước khi hệ thống có đủ thời gian phản ứng) và <strong>đừng can thiệp thêm khi chưa thấy hiệu quả</strong> của can thiệp trước."},
+
+{cat:"hethong",vi:"Điểm đòn bẩy",en:"Leverage Points",
+short:"<strong>Điểm đòn bẩy (leverage points)</strong> của Donella Meadows: trong một hệ thống, có những nơi một sự thay đổi nhỏ có thể tạo ra tác động lớn — và thường ngược trực giác: không phải ở nơi hiển nhiên nhất.",
+detail:"Meadows xếp hạng 12 điểm đòn bẩy, từ thấp đến cao: (thấp nhất) thay đổi thông số → thay đổi cấu trúc vật chất → thay đổi cấu trúc phản hồi → thay đổi mục tiêu → (cao nhất) thay đổi paradigm (mô hình tư duy nền tảng). Nghịch lý quan trọng: <strong>những điểm đòn bẩy cao nhất thường bị can thiệp sai hướng nhất</strong> — vì người ta tìm thấy đúng điểm đòn bẩy nhưng đẩy sai chiều. Ứng dụng: khi nhiều giải pháp không hiệu quả, hỏi «đây có phải là điểm đòn bẩy đúng không? Tôi có đang đẩy đúng hướng không?»",
+example:"Muốn giảm ô nhiễm: thay đổi giới hạn khí thải (thông số thấp, hiệu quả thấp) vs thay đổi cơ chế giá carbon (cấu trúc phản hồi, hiệu quả cao hơn) vs thay đổi cơ bản nhận thức xã hội về tiêu dùng (paradigm, hiệu quả cao nhất nhưng khó nhất). Nhiều chính sách tập trung vào điểm đòn bẩy thấp nhất vì dễ thực hiện, không phải vì hiệu quả nhất.",
+takeaway:"Khi giải pháp hiện tại không hiệu quả, hỏi: <strong>«Tôi đang can thiệp ở đâu trong hệ thống? Có điểm đòn bẩy cao hơn nào không?»</strong> Thường câu trả lời nằm ở <strong>thay đổi cấu trúc và quy tắc</strong>, không phải điều chỉnh thông số."},
+
+{cat:"hethong",vi:"Tư duy phi tuyến tính",en:"Non-linear Thinking",
+short:"Phần lớn trực giác con người là <strong>tuyến tính (linear)</strong> — nhưng nhiều hệ thống thực tế có mối quan hệ <strong>phi tuyến</strong>: gấp đôi đầu vào không cho gấp đôi đầu ra, và đôi khi thay đổi nhỏ tạo ra bước nhảy lớn.",
+detail:"Ví dụ phi tuyến quan trọng trong quyết định: (1) <strong>Tipping points</strong> — thay đổi tích lũy âm thầm cho đến khi vượt ngưỡng, hệ thống chuyển trạng thái đột ngột; (2) <strong>Diminishing returns</strong> — đầu tư thêm vào một điểm đã bão hòa mang lại ít giá trị hơn; (3) <strong>Network effects</strong> — giá trị tăng theo bình phương số người dùng (Metcalfe's Law); (4) <strong>Compounding</strong> — tăng trưởng lãi kép tạo ra kết quả phi tuyến theo thời gian. Lỗi tư duy tuyến tính: «nếu 1 ngàn khách hàng tốt thì 10 ngàn sẽ tốt gấp 10 lần» — không nhất thiết đúng khi cơ sở hạ tầng, hỗ trợ và quản lý đòi hỏi đầu tư phi tuyến.",
+example:"Thêm nhân viên vào dự án đã trễ thường làm dự án trễ hơn (Brooks's Law) — phi tuyến. Mạng xã hội: từ 0 đến 1 triệu người dùng tăng giá trị ít; từ 100 triệu đến 200 triệu tăng giá trị nhiều hơn nhiều do network effects.",
+takeaway:"Trước khi scale up bất cứ điều gì, hỏi: <strong>«Mối quan hệ giữa đầu vào và đầu ra là tuyến tính hay phi tuyến? Có tipping point, diminishing returns, hoặc network effect nào không?»</strong>"},
+
+{cat:"hethong",vi:"Hậu quả không mong muốn",en:"Unintended Consequences",
+short:"Mọi can thiệp vào hệ thống phức tạp đều tạo ra hậu quả ngoài ý muốn — đây không phải ngoại lệ mà là <strong>quy luật</strong> của hệ thống phức tạp. Người ra quyết định giỏi tích cực tìm kiếm và lên kế hoạch cho chúng.",
+detail:"Robert Merton (1936) phân tích 5 nguyên nhân gây unintended consequences: (1) <strong>Ignorance</strong> — không biết đủ về hệ thống; (2) <strong>Error</strong> — phân tích không chính xác; (3) <strong>Imperious immediacy of interest</strong> — lợi ích ngắn hạn ghi đè long-term; (4) <strong>Basic values</strong> — hành động phù hợp giá trị nhưng gây hậu quả ngược; (5) <strong>Self-defeating prophecy</strong> — dự đoán thay đổi hành vi, làm vô hiệu hóa chính dự đoán đó. Ví dụ nổi tiếng: <strong>Cobra effect</strong> — chính phủ Anh trả tiền cho mỗi con rắn hổ mang bị giết để giảm số rắn → người dân nuôi rắn hổ mang → khi dừng trả tiền, rắn nuôi được thả ra → số rắn tăng thêm.",
+example:"Luật cấm sử dụng điện thoại khi lái xe — unintended: người lái bắt đầu nhắn tin thấp hơn, tạo cảm giác «an toàn hơn» và lái nhanh hơn. Số tai nạn không giảm như kỳ vọng. Cần phân tích kỹ hơn về hành vi con người trong hệ thống.",
+takeaway:"Với mọi can thiệp vào hệ thống phức tạp, chủ động hỏi: <strong>«Ai hoặc gì khác trong hệ thống có thể phản ứng ngược lại? Điều gì có thể xảy ra mà tôi không muốn?»</strong> Lên kế hoạch monitoring để phát hiện sớm."},
+
+{cat:"hethong",vi:"Tư duy hệ thống vs tư duy tuyến tính",en:"Systems Thinking vs. Linear Thinking",
+short:"<strong>Tư duy tuyến tính</strong>: nguyên nhân → kết quả, đơn giản, phù hợp với hệ thống đơn giản. <strong>Tư duy hệ thống (systems thinking)</strong>: nhìn toàn bộ hệ thống với các vòng phản hồi, độ trễ và phi tuyến — cần thiết cho vấn đề phức tạp.",
+detail:"Jay Forrester (MIT) và Donella Meadows phát triển systems thinking như một ngành học. Sự khác biệt cốt lõi: tư duy tuyến tính hỏi «cái gì gây ra điều này?» (one cause, one effect); tư duy hệ thống hỏi «hệ thống tạo ra hành vi này như thế nào?» (multiple causes, circular causality). Công cụ systems thinking: <strong>Causal Loop Diagrams (CLD)</strong> — vẽ sơ đồ nhân quả vòng tròn; <strong>Stock and Flow diagrams</strong> — mô hình hóa tích lũy và dòng chảy. Áp dụng: <strong>«The Fifth Discipline»</strong> của Peter Senge — tổ chức học systems thinking để ra quyết định tốt hơn.",
+example:"Bệnh viện tắc nghẽn: tư duy tuyến tính → thêm giường bệnh. Tư duy hệ thống → phát hiện: bệnh nhân nằm lâu hơn cần thiết vì thiếu cơ sở chăm sóc tại nhà, làm tắc nghẽn → thêm giường chỉ giải quyết triệu chứng. Giải pháp hệ thống: tăng cơ sở chăm sóc tại nhà giảm thời gian nằm viện nhiều hơn việc thêm giường.",
+takeaway:"Khi quyết định không tạo ra kết quả mong đợi dù đã thực hiện nhiều lần, đây là dấu hiệu cần <strong>tư duy hệ thống</strong>. Hỏi: <strong>«Hệ thống tôi đang cố thay đổi có những feedback loops nào mà tôi chưa nhìn thấy?»</strong>"},
+
+{cat:"hethong",vi:"Mô hình tinh thần và bản đồ",en:"Mental Models as Maps",
+short:"Mọi quyết định đều dựa trên <strong>bản đồ tinh thần (mental map)</strong> về thực tế — và như Korzybski nói: <strong>«The map is not the territory»</strong> (bản đồ không phải vùng đất). Quyết định tệ thường đến từ bản đồ sai.",
+detail:"Korzybski: bất kỳ mô tả nào về thực tế cũng là một bản đồ đơn giản hóa — không phải thực tế. Bản đồ tinh thần của chúng ta: (1) <strong>Không đầy đủ</strong> — bỏ sót chi tiết; (2) <strong>Có độ trễ</strong> — được xây dựng từ kinh nghiệm quá khứ, không cập nhật kịp thực tại; (3) <strong>Có thiên kiến</strong> — phản ánh góc nhìn cá nhân. Vấn đề: chúng ta hành động dựa trên bản đồ như thể nó là thực tế. Biện pháp: liên tục cập nhật bản đồ bằng cách tìm kiếm bằng chứng phản bác, tìm hiểu góc nhìn đối lập, thừa nhận giới hạn của mô hình. Einstein: <strong>«Mọi mô hình đều sai, nhưng có một số hữu ích.»</strong>",
+example:"Một CEO có bản đồ tinh thần «nhân viên trẻ lười biếng và không đáng tin» (xây dựng từ một vài kinh nghiệm tiêu cực). Quyết định tuyển dụng, giao việc và phát triển nhân sự đều bị méo mó bởi bản đồ sai này — mà không nhận ra.",
+takeaway:"Định kỳ hỏi: <strong>«Bản đồ tinh thần tôi đang dùng cho quyết định này được xây dựng từ khi nào? Thực tế đã thay đổi gì mà tôi chưa cập nhật?»</strong> Tìm người hoặc thông tin thách thức bản đồ hiện tại của bạn."},
+
+{cat:"hethong",vi:"Tư duy cấp độ thứ hai",en:"Second-order Thinking",
+short:"<strong>Tư duy bậc hai (second-order thinking)</strong>: không chỉ hỏi «điều này sẽ dẫn đến gì» (bậc một) mà còn «rồi điều đó sẽ dẫn đến gì tiếp theo?» (bậc hai và xa hơn). Howard Marks gọi đây là chìa khóa để vượt trội trong đầu tư và quản lý.",
+detail:"Tư duy bậc một là phổ biến và nhanh, bậc hai đòi hỏi công sức hơn nhưng tạo ra lợi thế: <strong>«Everyone can see first-order effects; second-order effects give you an edge.»</strong> Ví dụ: tư duy bậc một về thuốc giảm đau → đau ít hơn (tốt). Bậc hai: đau ít hơn → ít thận trọng hơn → dễ tái chấn thương. Trong kinh doanh: bậc một — giảm giá → nhiều khách hàng hơn. Bậc hai — nhiều khách hàng hơn → đối thủ cũng giảm giá → cuộc chiến giá → lợi nhuận toàn ngành giảm. Bậc ba: lợi nhuận giảm → ít đầu tư vào chất lượng → ngành suy thoái dài hạn.",
+example:"Chính phủ quy định giá thuê nhà tối đa để giúp người thu nhập thấp (bậc một: tốt). Bậc hai: chủ nhà không đầu tư bảo trì → nhà xuống cấp; bậc hai: cung nhà giảm vì ít người xây → khan hiếm hơn. Bậc ba: người thu nhập thấp khó thuê nhà hơn. Kết quả ngược ý định ban đầu.",
+takeaway:"Trước quyết định quan trọng, <strong>vẽ ra «chuỗi hệ quả» ít nhất 3 bước</strong>: nếu A → B, rồi B → C, rồi C → D. Hỏi: <strong>«Ai được lợi và ai bị thiệt ở mỗi bậc? Hậu quả bậc hai có phủ nhận lợi ích bậc một không?»</strong>"},
+
+// ===== 8. TÂM LÝ & CẢM XÚC =====
+{cat:"tamly",vi:"Cảm xúc và quyết định",en:"Emotions and Decision Making",
+short:"Cảm xúc không phải kẻ thù của quyết định lý trí — chúng là <strong>thông tin</strong>. Damasio's <strong>«Somatic Marker Hypothesis»</strong>: người mất khả năng cảm xúc (tổn thương não) không ra được quyết định tốt dù trí tuệ nguyên vẹn.",
+detail:"Antonio Damasio nghiên cứu bệnh nhân Phineas Gage và Elliot — tổn thương não vùng xử lý cảm xúc khiến họ không thể ra quyết định thực tế dù IQ và trí nhớ bình thường. Kết luận: cảm xúc tạo ra «somatic markers» — cảm giác về kết quả tương lai dựa trên kinh nghiệm quá khứ — giúp thu hẹp không gian lựa chọn. Cảm xúc tốt trong quyết định: (1) <strong>Nhận ra</strong> — cảm xúc đang báo hiệu gì; (2) <strong>Xác minh</strong> — cảm xúc này có cơ sở hợp lý không; (3) <strong>Tích hợp</strong> — dùng thông tin cảm xúc cùng với phân tích logic. Sai lầm: vừa hoàn toàn theo cảm xúc, vừa hoàn toàn bỏ qua cảm xúc.",
+example:"Một doanh nhân cảm thấy «có gì đó không đúng» với đối tác tiềm năng dù hồ sơ rất tốt. Thay vì bỏ qua cảm xúc đó, ông điều tra kỹ hơn — phát hiện lịch sử gian lận trong công ty trước của đối tác. Cảm xúc là tín hiệu cần xác minh, không phải quyết định cuối.",
+takeaway:"Khi có cảm xúc mạnh về một quyết định, <strong>dừng lại và hỏi: «Cảm xúc này đang báo hiệu gì?»</strong> Xác minh tín hiệu đó bằng bằng chứng cụ thể. Không bỏ qua — nhưng cũng không hành động thuần túy theo cảm xúc mà không kiểm chứng."},
+
+{cat:"tamly",vi:"Quyết định trong áp lực và căng thẳng",en:"Decision Making Under Stress",
+short:"Căng thẳng (stress) làm hẹp phạm vi chú ý, ưu tiên <strong>Hệ thống 1</strong> và hành động ngắn hạn, làm suy giảm nghiêm trọng chất lượng quyết định — người ra quyết định giỏi nhận biết trạng thái này và điều chỉnh.",
+detail:"Nghiên cứu tâm lý học nhận thức: stress hormone (cortisol, adrenaline) cải thiện quyết định tức thời (fight-or-flight) nhưng suy giảm <strong>prefrontal cortex function</strong> — vùng não chịu trách nhiệm tư duy có chủ đích, lập kế hoạch và kiểm soát xung động. Hệ quả: dưới stress cao, người ta (1) thu hẹp lựa chọn xem xét; (2) tập trung vào rủi ro ngắn hạn hơn lợi ích dài hạn; (3) dễ bị ảnh hưởng bởi framing và anchoring hơn; (4) <strong>risk aversion tăng đối với lợi ích, risk seeking tăng đối với mất mát</strong>. Chiến lược: nhận ra trạng thái, trì hoãn quyết định không khẩn cấp, giảm stress trước khi quyết định quan trọng.",
+example:"Khủng hoảng PR đột ngột: CEO dưới áp lực phản hồi ngay lập tức trên Twitter (stress cao). Quyết định tức thì thường tệ hơn chờ 2-4 giờ để đội ngũ phân tích — dù cảm giác «phải phản hồi ngay». Áp lực thời gian nhân tạo là chiến thuật đàm phán phổ biến để làm suy giảm chất lượng quyết định đối phương.",
+takeaway:"Nhận biết khi nào bạn đang dưới stress cao. Với quyết định không thực sự khẩn cấp: <strong>trì hoãn có chủ đích</strong>. Với quyết định khẩn cấp thực sự: có quy trình và checklist chuẩn bị sẵn từ trước (khi không có stress) để thực thi."},
+
+{cat:"tamly",vi:"Tự nhận thức và điểm mù",en:"Self-Awareness and Blind Spots",
+short:"<strong>Điểm mù (blind spots)</strong> là những thiên kiến và điểm yếu mà bản thân không nhận ra — khó sửa nhất vì định nghĩa: không biết những gì mình không biết (<strong>«unknown unknowns»</strong>).",
+detail:"Johari Window (Luft & Ingham, 1955): 4 ô về bản thân — (1) Open area: bạn biết và người khác biết; (2) Hidden area: bạn biết nhưng người khác không biết; (3) <strong>Blind spot</strong>: người khác biết nhưng bạn không biết; (4) Unknown area: cả hai đều không biết. Trong ra quyết định, blind spots nguy hiểm nhất: thường đến từ sức mạnh quá mức (<strong>«strengths overused»</strong>) — người phân tích tuyệt vời có thể bị analysis paralysis; người quyết đoán cao có thể quyết định khi chưa đủ thông tin. Biện pháp: xin feedback trực tiếp, 360 feedback, tìm người mentor dám nói sự thật.",
+example:"Một PM xuất sắc về kỹ thuật luôn quyết định dựa trên data — nhưng blind spot là khó chịu với sự mơ hồ và có xu hướng delay quyết định đến khi có «đủ data». Trong thị trường thay đổi nhanh, đây là weakness lớn mà ông không tự nhận ra cho đến khi nhận feedback 360.",
+takeaway:"Chủ động thu thập feedback về <strong>«khi nào tôi hay ra quyết định tệ nhất?»</strong> Hỏi người tin cậy: <strong>«Điểm mù lớn nhất của tôi trong ra quyết định là gì?»</strong> Và thực sự lắng nghe, không biện hộ."},
+
+{cat:"tamly",vi:"Bẫy lạc quan và thực tế",en:"Optimism Bias and Defensive Pessimism",
+short:"<strong>Thiên kiến lạc quan (optimism bias)</strong>: ước tính khả năng thành công cao hơn thực tế. <strong>Bi quan phòng thủ (defensive pessimism)</strong>: chủ động tưởng tượng điều tệ nhất để chuẩn bị tốt hơn. Cả hai chiến lược đều có giá trị ở đúng ngữ cảnh.",
+detail:"Tali Sharot nghiên cứu: 80% người ước tính xác suất thành công của mình cao hơn trung bình (impossible by definition). Lý do: optimism bias giúp chúng ta hành động dù có rủi ro — nếu hoàn toàn thực tế về xác suất thành công thấp, nhiều người sẽ không bao giờ bắt đầu gì. Nhưng quá lạc quan dẫn đến: planning fallacy, underestimating costs, ignoring risks. Defensive pessimism ngược lại: tưởng tượng thất bại một cách chi tiết → giảm lo lắng và tăng chuẩn bị. Giải pháp cân bằng: <strong>«realistic optimism»</strong> — lạc quan về mục tiêu dài hạn, thực tế về kế hoạch ngắn hạn. Kahneman: dùng «outside view» để điều chỉnh optimism bias.",
+example:"Một founder lạc quan tin tưởng sâu sắc vào vision dài hạn (cần thiết để tiếp tục khi khó khăn) nhưng lập kế hoạch tài chính theo kịch bản xấu nhất (defensive pessimism) — đảm bảo cash flow đủ để sống sót đến khi vision thành hiện thực.",
+takeaway:"Dùng <strong>lạc quan cho mục tiêu</strong> (để tạo energy và persistence); dùng <strong>«inside view» + «outside view»</strong> cùng lúc cho kế hoạch. Trước dự án lớn, xem base rate của dự án tương tự và điều chỉnh kế hoạch theo thực tế đó."},
+
+{cat:"tamly",vi:"Ưu tiên thời gian và hiện tại",en:"Temporal Discounting",
+short:"<strong>Temporal discounting (chiết khấu thời gian)</strong>: xu hướng đánh giá phần thưởng hiện tại cao hơn phần thưởng tương lai — dẫn đến quyết định thiên về ngắn hạn ngay cả khi biết dài hạn tốt hơn.",
+detail:"Chúng ta không discounting đều đặn (exponential) mà discounting theo hình hyperbola: giảm mạnh trong tương lai gần rồi phẳng dần — gây ra <strong>«time inconsistency»</strong>: thứ Hai muốn tập gym thứ Năm, đến thứ Năm không muốn. Hệ quả: (1) Tiết kiệm, đầu tư dài hạn thường thấp hơn tối ưu; (2) Quyết định sức khỏe, giáo dục bị undervalued; (3) Thay đổi quyết định khi thời điểm đến gần («present bias»). Biện pháp: <strong>«commitment devices»</strong> — cam kết trước khi nhận ra bạn sẽ thay đổi ý (tiết kiệm tự động, đăng ký chương trình); <strong>«vivid future self»</strong> — hình dung rõ ràng bản thân tương lai để tăng kết nối cảm xúc.",
+example:"Odysseus biết mình sẽ muốn đến gần tiếng hát Sirens khi gần đó — nên buộc mình vào cột thuyền TRƯỚC KHI đến gần. Đây là commitment device cổ điển: hành động trước để ngăn chặn quyết định tệ trong tương lai khi «present bias» mạnh nhất.",
+takeaway:"Thiết kế <strong>«commitment devices»</strong> cho quyết định bạn biết mình sẽ trì hoãn hoặc thay đổi: tự động hóa tiết kiệm, đặt deadline công khai, nhờ người accountability. Khi biết bạn sẽ muốn «thư giãn» ngay trước việc khó, hành động ngay bây giờ."},
+
+{cat:"tamly",vi:"Trí tuệ cảm xúc trong ra quyết định",en:"Emotional Intelligence in Decision Making",
+short:"<strong>Trí tuệ cảm xúc (EI/EQ)</strong> — nhận biết, hiểu và quản lý cảm xúc của bản thân và người khác — là yếu tố quan trọng trong quyết định liên quan đến con người, không phải chỉ phân tích logic.",
+detail:"Daniel Goleman phân EI thành 5 thành phần: (1) <strong>Self-awareness</strong> — nhận biết cảm xúc của mình; (2) <strong>Self-regulation</strong> — kiểm soát phản ứng cảm xúc; (3) <strong>Motivation</strong> — thúc đẩy nội tại; (4) <strong>Empathy</strong> — hiểu cảm xúc người khác; (5) <strong>Social skills</strong> — quản lý quan hệ. Trong ra quyết định: EI cao giúp: (1) Không quyết định khi đang cảm xúc mạnh (hot state); (2) Đọc được động lực thật của stakeholders; (3) Xây dựng trust để nhận được thông tin trung thực hơn; (4) Truyền đạt quyết định khó khăn hiệu quả hơn. Nghiên cứu: EI dự đoán leadership effectiveness tốt hơn IQ trong nhiều bối cảnh.",
+example:"Hai CEO cùng nhận feedback tiêu cực từ board: CEO A (EI thấp) phản ứng phòng thủ, mất tập trung vào thông điệp thực; CEO B (EI cao) nhận ra cảm xúc phòng thủ đang nổi lên, chủ động «tắt» nó, lắng nghe thực sự và học được insight quan trọng cho chiến lược.",
+takeaway:"Trước khi ra quyết định quan trọng liên quan đến người khác, hỏi: <strong>«Tôi đang ở trạng thái cảm xúc nào? Động lực thật của các bên liên quan là gì?»</strong> Nếu cảm xúc đang cao, đặt lịch quyết định sau khi có thời gian bình tĩnh."},
+
+// ===== 9. PHÁN ĐOÁN & TRỰC GIÁC =====
+{cat:"trucgiac",vi:"Trực giác của chuyên gia",en:"Expert Intuition",
+short:"Trực giác của chuyên gia trong lĩnh vực có <strong>feedback nhanh và rõ ràng</strong> là đáng tin cậy — đây là kết quả học máy vô thức từ hàng ngàn ví dụ. Nhưng trực giác trong môi trường không có feedback ổn định thì thường sai.",
+detail:"Gary Klein nghiên cứu «naturalistic decision making» — lính cứu hỏa, y tá ICU ra quyết định nhanh và đúng trong khủng hoảng mà không có thời gian phân tích. Cơ chế: <strong>«recognition-primed decision» (RPD)</strong> — nhận ra pattern, tưởng tượng hành động, simulate kết quả, quyết định. Nhưng Kahneman phản bác: trực giác chỉ đáng tin khi: (1) <strong>Môi trường đủ đơn giản và ổn định</strong> để tạo pattern; (2) <strong>Feedback đủ nhanh và chính xác</strong> để học. Cờ vua, bóng đá, cứu hỏa: có. Kinh tế học vĩ mô, thị trường tài chính, chính sách xã hội: không.",
+example:"Bác sĩ ICU 20 năm kinh nghiệm nhận ra dấu hiệu sớm của nhiễm trùng huyết trong vài phút — dù không thể giải thích rõ ràng. Đây là trực giác chuyên gia đáng tin. Ngược lại, chuyên gia kinh tế «trực giác» về GDP năm sau thường không chính xác hơn người ngẫu nhiên.",
+takeaway:"Trước khi tin vào trực giác (của mình hoặc người khác), hỏi: <strong>«Người này đã tiếp xúc với bao nhiêu ví dụ tương tự? Feedback có nhanh và rõ ràng không?»</strong> Nếu không — trực giác đó cần được kiểm chứng."},
+
+{cat:"trucgiac",vi:"Quyết định tốc độ và chậm rãi",en:"Fast and Slow Decisions",
+short:"Không phải mọi quyết định đều cần phân tích kỹ — và không phải mọi quyết định đều nên quyết định nhanh. Kỹ năng quan trọng: <strong>biết quyết định nào cần «thinking fast» và quyết định nào cần «thinking slow»</strong>.",
+detail:"Framework phân loại quyết định theo hai chiều: (1) <strong>Tầm quan trọng</strong> (impact nếu sai); (2) <strong>Độ bất định</strong> (uncertainty về kết quả). Bốn ô: Quan trọng + bất định cao → slow, phân tích kỹ; Quan trọng + bất định thấp (rõ ràng) → fast, dựa vào expert intuition; Ít quan trọng + bất định cao → fast, experimentation; Ít quan trọng + bất định thấp → automate/delegate. Lỗi thường gặp: (1) Quyết định nhanh những thứ quan trọng vì áp lực thời gian; (2) Phân tích quá kỹ những thứ không quan trọng (analysis paralysis về lựa chọn nhỏ). Jeff Bezos: <strong>«Two-way doors should be decided fast by single individuals; one-way doors need broad consensus.»</strong>",
+example:"Chọn màu sắc button website (ít quan trọng, bất định thấp): A/B test 2 tuần rồi quyết định — đừng họp 2 giờ. Quyết định M&A 500 tỷ (quan trọng cao, bất định cao): cần 3-6 tháng due diligence, không cần áp lực «cơ hội chỉ có hôm nay».",
+takeaway:"Trước khi dành thời gian cho quyết định, hỏi: <strong>«Quyết định này thực sự quan trọng đến đâu? Bất định đến đâu?»</strong> Phân bổ thời gian tư duy tương xứng — không đều nhau cho mọi quyết định."},
+
+{cat:"trucgiac",vi:"Năm nguyên tắc nhận dạng (WRAP)",en:"WRAP Framework",
+short:"Chip và Dan Heath đề xuất <strong>WRAP framework</strong> để cải thiện quyết định: <strong>W</strong>iden your options, <strong>R</strong>eality-test your assumptions, <strong>A</strong>ttain distance before deciding, <strong>P</strong>repare to be wrong.",
+detail:"(1) <strong>Widen your options</strong> — tránh lựa chọn nhị phân «làm hay không làm»; tìm ít nhất 3 lựa chọn thực sự khác nhau; hỏi «và/hoặc» thay vì «hoặc/hoặc». (2) <strong>Reality-test your assumptions</strong> — tìm kiếm base rate; tiến hành small-scale experiments; tìm người bất đồng để lắng nghe. (3) <strong>Attain distance</strong> — tạo khoảng cách cảm xúc (10/10/10 test: trong 10 phút, 10 tháng, 10 năm cảm giác thế nào?); xem như quyết định cho người khác. (4) <strong>Prepare to be wrong</strong> — pre-mortem; xây dựng «tripwires» (điều kiện khi nào xem xét lại); lên kịch bản thất bại và cách ứng phó.",
+example:"Quyết định có nên bỏ việc để startup: (W) Không chỉ «bỏ hay không» — xem xét: bỏ hoàn toàn, startup part-time, đàm phán sabbatical 6 tháng. (R) Tìm 10 người đã làm tương tự và hỏi thực tế. (A) 10/10/10: trong 10 phút tôi lo, 10 tháng tôi vẫn phân vân, 10 năm: tôi sẽ hối hận gì hơn — bỏ hay không bỏ? (P) Nếu startup thất bại trong 18 tháng, kế hoạch B là gì?",
+takeaway:"Khi gặp quyết định khó, áp dụng <strong>WRAP</strong>: (1) Mở rộng lựa chọn — có ít nhất 3 phương án thực sự khác biệt? (2) Kiểm tra giả định bằng thực tế. (3) Tạo khoảng cách cảm xúc — dùng 10/10/10. (4) Chuẩn bị cho thất bại — pre-mortem và tripwires."},
+
+{cat:"trucgiac",vi:"Bài kiểm tra tư duy phản diện",en:"Devil's Advocate Test",
+short:"Chỉ định một người (hoặc tự đóng vai) <strong>phản biện có chủ đích (devil's advocate)</strong> — nhiệm vụ là tìm mọi lý do quyết định này sai, bất kể bản thân họ thực sự nghĩ gì.",
+detail:"Thực hành này có nguồn gốc từ Công giáo La Mã (Advocatus Diaboli trong quá trình phong thánh — người có nhiệm vụ tìm lý do tại sao ứng viên KHÔNG nên được phong thánh). Trong ra quyết định: giá trị không phải là người đó phản biện đúng hay sai — mà là <strong>buộc nhóm phải đối mặt với những luận điểm khó khăn nhất</strong>. Điều kiện để hoạt động: (1) Devil's advocate phải được phép nói thật, không sợ hậu quả; (2) Nhóm phải cam kết lắng nghe thực sự, không chỉ «chịu đựng»; (3) Không biến thành cuộc chơi mà mọi người biết ý kiến «không thật». Biến thể: <strong>«red team»</strong> — một nhóm riêng được giao nhiệm vụ tìm cách «tấn công» quyết định.",
+example:"Trước khi ra mắt sản phẩm mới, Apple thường tổ chức «tear-down session» — đội sản phẩm có nhiệm vụ tìm mọi lý do tại sao sản phẩm sẽ thất bại, trước khi đội khác lên kế hoạch launch. Không phải để nản lòng mà để chuẩn bị tốt hơn.",
+takeaway:"Trước quyết định nhóm quan trọng, <strong>chỉ định chính thức một «devil's advocate»</strong> với nhiệm vụ tìm mọi lý do sai. Đảm bảo người đó được an toàn khi nói — và lắng nghe thực sự thay vì chỉ để đủ quy trình."},
+
+{cat:"trucgiac",vi:"Bài kiểm tra người thông minh và tốt bụng",en:"Smart and Kind Person Test",
+short:"Kiểm tra quyết định bằng cách hỏi: <strong>«Một người thông minh và tốt bụng — người biết tất cả ngữ cảnh — sẽ nghĩ gì về quyết định này?»</strong> Công cụ đơn giản nhưng hiệu quả để kiểm tra tính hợp lý và đạo đức.",
+detail:"Jeff Bezos dùng biến thể: <strong>«Newspaper test»</strong> — liệu quyết định này có xuất hiện trên báo vì sai trái không? Nhưng cũng hỏi chiều ngược lại: liệu <strong>không làm</strong> quyết định này có xuất hiện trên báo vì thiếu dũng cảm không? Reed Hastings (Netflix) dùng «informed captain» test. Ý nghĩa chung: thoát khỏi góc nhìn chủ quan, hình dung một người quan sát bên ngoài đủ thông tin và thiện chí — người đó sẽ nghĩ gì? Công cụ này đặc biệt hiệu quả khi cảm giác «đang hợp lý hóa» điều mình muốn làm.",
+example:"CEO cân nhắc không công bố lỗi sản phẩm nhỏ vì «sẽ gây hoảng loạn không cần thiết». Áp dụng test: «Một người thông minh và tốt bụng, biết đầy đủ thông tin — sẽ đánh giá quyết định không công bố này thế nào?» Câu trả lời thường chỉ ra con đường đúng.",
+takeaway:"Khi nghi ngờ về một quyết định (đặc biệt liên quan đến đạo đức hay người khác), hỏi: <strong>«Người tôi tôn trọng nhất và người thông minh nhất tôi biết — họ sẽ đánh giá quyết định này thế nào nếu biết đầy đủ ngữ cảnh?»</strong>"},
+
+// ===== 10. QUYẾT ĐỊNH NHÓM & TỔ CHỨC =====
+{cat:"nhom",vi:"Kiến trúc quyết định",en:"Decision Architecture",
+short:"<strong>Kiến trúc quyết định (decision architecture)</strong>: thiết kế quy trình, cấu trúc và môi trường để nhóm và tổ chức ra quyết định tốt hơn một cách có hệ thống, không phụ thuộc vào ý chí cá nhân.",
+detail:"Richard Thaler và Cass Sunstein («Nudge»): cách lựa chọn được trình bày ảnh hưởng sâu sắc đến kết quả — «choice architecture» có thể định hướng hành vi mà không ép buộc. Trong tổ chức: (1) <strong>Ai được phép ra quyết định gì</strong> (authority matrix, RACI); (2) <strong>Quy trình ra quyết định</strong> (consensus vs consult vs command); (3) <strong>Thời điểm và điều kiện</strong> ra quyết định (không ra quyết định chiến lược quan trọng cuối ngày thứ Sáu); (4) <strong>Thông tin được cung cấp như thế nào</strong> (framing, order, completeness). Good decision architecture: giảm friction cho quyết định tốt, tăng friction cho quyết định tệ.",
+example:"Amazon «6-pager memo» thay vì PowerPoint: viết tài liệu 6 trang đầy đủ ngữ cảnh → đọc im lặng 30 phút đầu cuộc họp → thảo luận. Thiết kế này: (1) Buộc người đề xuất phải suy nghĩ kỹ; (2) Loại bỏ lợi thế của người nói hay; (3) Mọi người cùng mức thông tin trước khi thảo luận.",
+takeaway:"Đừng chỉ cải thiện quyết định cá nhân — <strong>thiết kế lại quy trình ra quyết định của nhóm</strong>. Hỏi: «Ai nên ra quyết định này? Thông tin cần được trình bày thế nào để giảm thiên kiến? Khi nào là thời điểm tốt nhất để quyết định?»"},
+
+{cat:"nhom",vi:"Sự đồng thuận và phân quyền",en:"Consensus vs. Delegation",
+short:"Không phải quyết định nào cũng cần đồng thuận — và không phải quyết định nào cũng nên ủy quyền hoàn toàn. Biết <strong>khi nào dùng consensus, consult, hay command</strong> là kỹ năng lãnh đạo cốt lõi.",
+detail:"Framework RACI: Responsible (thực hiện), Accountable (chịu trách nhiệm cuối cùng), Consulted (được hỏi ý kiến), Informed (được thông báo). Nguyên tắc: (1) <strong>Quyết định tốc độ cao, reversible</strong> → ủy quyền cho cá nhân gần nhất với vấn đề; (2) <strong>Quyết định tầm ảnh hưởng rộng, irreversible</strong> → consult rộng, decide chậm; (3) <strong>Khủng hoảng</strong> → command rõ ràng. Lỗi phổ biến: (1) <strong>HiPPO effect</strong> (Highest Paid Person's Opinion) — ý kiến của người có chức vụ cao nhất chiếm ưu thế không tương xứng; (2) <strong>Consensus trap</strong> — tìm đồng thuận cho mọi thứ dẫn đến quyết định trung bình và chậm.",
+example:"Amazon sử dụng nguyên tắc «disagree and commit»: nếu đã thảo luận đủ mà không đồng thuận, người có authority cao hơn quyết định — nhưng người bất đồng cam kết thực hiện hết mình. Không cần đồng thuận giả tạo, không trì hoãn vô thời hạn.",
+takeaway:"Với mỗi quyết định quan trọng, làm rõ ngay: <strong>«Ai là người quyết định cuối cùng (Accountable)? Ai cần được hỏi ý kiến (Consulted)? Ai cần được thông báo (Informed)?»</strong> Rõ ràng về quyết định này ngay từ đầu tiết kiệm nhiều thời gian và hiểu lầm."},
+
+{cat:"nhom",vi:"Thiết kế cuộc họp ra quyết định",en:"Decision Meeting Design",
+short:"Hầu hết cuộc họp không ra được quyết định tốt vì <strong>thiết kế sai</strong>: sai người, sai thời điểm, sai thông tin, sai kỳ vọng. Thiết kế cuộc họp ra quyết định là kỹ năng quản lý quan trọng.",
+detail:"Năm lỗi phổ biến trong meeting ra quyết định: (1) <strong>Không rõ mục tiêu</strong> — là information-sharing, problem-solving hay decision-making? (2) <strong>Quá nhiều người</strong> — Bezos: nếu cần 2 pizza để nuôi nhóm họp thì nhóm quá lớn; (3) <strong>Không có pre-read</strong> — mọi người đến với thông tin khác nhau; (4) <strong>HiPPO effect</strong> — ý kiến cấp cao chi phối; (5) <strong>Kết thúc không rõ quyết định</strong> — ai cần làm gì, khi nào. Thiết kế tốt: gửi pre-read, xác định decision-maker, thu thập ý kiến ẩn danh trước, im lặng đọc tài liệu 10-15 phút đầu, kết thúc bằng «What did we decide? Who does what by when?»",
+example:"Amazon 6-pager: tài liệu 6 trang được gửi trước, đầu họp đọc im lặng 25-30 phút, sau đó thảo luận. Kết quả: cuộc họp đi thẳng vào những điểm quan trọng nhất thay vì mất 30 phút đầu tóm tắt background mà mọi người lẽ ra phải biết trước.",
+takeaway:"Trước mỗi cuộc họp ra quyết định, gửi <strong>pre-read rõ ràng</strong> và nêu rõ: «Quyết định cần ra là gì? Ai là người quyết định cuối cùng? Thông tin cần có là gì?» Kết thúc mỗi meeting bằng: <strong>«Decision made: ___. Owner: ___. Deadline: ___.»</strong>"},
+
+{cat:"nhom",vi:"Thông tin bất cân xứng trong nhóm",en:"Information Asymmetry in Groups",
+short:"Thành viên nhóm thường không chia sẻ thông tin đặc thù mà chỉ họ biết — và nhóm tập trung vá»¥a vào thông tin ai cũng biết. <strong>«Hidden profiles»</strong> — thông tin quan trọng bị ẩn — là lý do nhóm đôi khi quyết định tệ hơn cá nhân.",
+detail:"Stasser & Titus (1985): khi nhóm có thông tin chung + thông tin đặc thù (chỉ một người biết), cuộc thảo luận thường tập trung vào thông tin chung — «unshared information» bị bỏ qua dù có thể quyết định cục diện. Nguyên nhân: (1) Thông tin chung được xác nhận nhiều lần, cảm thấy đáng tin hơn; (2) Chia sẻ thông tin unique có rủi ro xã hội (sợ bị coi lạc đề hoặc sai). Biện pháp: (1) <strong>Structured information sharing</strong> — mỗi người phải trình bày góc nhìn riêng trước khi thảo luận chung; (2) Dùng <strong>pre-mortem</strong> để bề mặt hóa thông tin ẩn; (3) Hỏi trực tiếp: «Ai có thông tin nào mà người khác có thể chưa biết?»",
+example:"Trong meeting tuyển dụng: 3/4 thành viên biết ứng viên có giao tiếp tốt (thông tin chung). Nhưng chỉ 1 người (người phỏng vấn kỹ thuật) biết ứng viên không vượt qua test cơ bản — nhưng không nói vì không ai hỏi. Kết quả: nhóm tập trung vào giao tiếp tốt và quyết định tuyển.",
+takeaway:"Trước khi thảo luận nhóm quan trọng, <strong>yêu cầu mỗi người viết và chia sẻ thông tin riêng mà họ có mà người khác có thể không biết</strong>. Hỏi trực tiếp: «Có thông tin nào liên quan mà chưa được đề cập không?»"},
+
+{cat:"nhom",vi:"Đa dạng nhận thức",en:"Cognitive Diversity",
+short:"<strong>Đa dạng nhận thức (cognitive diversity)</strong> — sự khác biệt về cách suy nghĩ, tiếp cận vấn đề và mô hình tâm thần — quan trọng hơn đa dạng nhân khẩu học trong cải thiện chất lượng quyết định nhóm.",
+detail:"Scott Page («The Diversity Bonus»): nhóm đa dạng về <strong>cách giải quyết vấn đề</strong> thường tốt hơn nhóm đồng nhất, kể cả khi các thành viên đồng nhất giỏi hơn trung bình. Lý do: cognitive diversity tạo ra nhiều góc nhìn, phát hiện more edge cases, ít groupthink hơn. Nhưng: đa dạng nhân khẩu học không tự động tạo ra đa dạng nhận thức — cần tạo môi trường an toàn để các góc nhìn khác biệt được thực sự chia sẻ. Đo lường cognitive diversity: khuyến khích mọi người nêu assumptions, mental models và prior experiences — sau đó xem mức độ khác nhau.",
+example:"Một hội đồng gồm 5 người cùng background kinh tế học cổ điển (đồng nhất nhận thức) vs 5 người từ kinh tế học, tâm lý học, kỹ sư, xã hội học và luật (đa dạng nhận thức) — nhóm thứ hai thường phát hiện được nhiều rủi ro và cơ hội hơn khi phân tích chính sách phức tạp.",
+takeaway:"Khi xây dựng nhóm ra quyết định, không chỉ hỏi <strong>«ai giỏi nhất?»</strong> mà còn hỏi <strong>«ai suy nghĩ khác nhau nhất?»</strong> Đảm bảo môi trường an toàn để các góc nhìn thiểu số được nghe — không chỉ đa dạng về hình thức."},
+
+{cat:"nhom",vi:"Cam kết sau quyết định",en:"Post-Decision Commitment",
+short:"Quyết định tốt vô nghĩa nếu không được thực thi tốt — <strong>sự cam kết sau quyết định (post-decision commitment)</strong> phụ thuộc vào cách quyết định được ra: người tham gia vào quá trình cam kết thực hiện tốt hơn.",
+detail:"Nghiên cứu về «procedural fairness»: người ta chấp nhận kết quả không thuận lợi khi cảm thấy <strong>quá trình ra quyết định công bằng</strong> — ngay cả khi không đồng ý với quyết định. Điều này nghĩa là: (1) Được lắng nghe là quan trọng, không phải chỉ được đồng ý; (2) Giải thích lý do quyết định tăng commitment; (3) «Disagree and commit» chỉ hoạt động khi mọi người thực sự cảm thấy được nghe trước đó. Lỗi phổ biến: ra quyết định mà không giải thích tại sao → team thực hiện một cách hình thức hoặc «ngầm phá hoại». Jeff Bezos: <strong>«The team that disagrees with me and says so is more valuable than the team that agrees and does it half-heartedly.»</strong>",
+example:"Một quyết định đổi tech stack được team engineering phản đối — nhưng CTO giải thích đầy đủ trade-offs, lắng nghe lo ngại cụ thể, và thừa nhận «chúng ta có thể sai». Team sau đó implement với effort 100% dù bất đồng ban đầu. Ngược lại: quyết định tương tự bị «áp đặt» → team implement miễn cưỡng, không report issues → dự án thất bại.",
+takeaway:"Sau mỗi quyết định quan trọng, <strong>giải thích lý do rõ ràng</strong> (không chỉ kết quả quyết định). Xác nhận: «Bạn có thể không đồng ý, nhưng tôi cần bạn cam kết thực hiện hết mình. Nếu bạn không thể — hãy nói ngay bây giờ.»"},
+
+{cat:"nhom",vi:"Học tổ chức từ quyết định",en:"Organizational Learning from Decisions",
+short:"Tổ chức học hỏi không phải từ kinh nghiệm — mà từ <strong>phản hồi có cấu trúc về kinh nghiệm</strong>. Không có quá trình deliberate review, tổ chức lặp lại sai lầm ngay cả khi cá nhân đã học.",
+detail:"Chris Argyris phân biệt <strong>single-loop learning</strong> (sửa hành vi để đạt mục tiêu hiện tại) và <strong>double-loop learning</strong> (xem xét lại assumptions và mục tiêu cơ bản). Hầu hết tổ chức chỉ làm single-loop. Thực hành double-loop: sau mỗi quyết định quan trọng có kết quả, tổ chức AAR (<strong>After Action Review</strong>) — không phải «blame session» mà là học hỏi có cấu trúc: (1) Điều gì xảy ra thực sự? (2) Điều gì được kỳ vọng? (3) Tại sao có sự khác biệt? (4) Bài học nào cho lần sau? Thứ quan trọng hơn: thay đổi <strong>system và process</strong>, không chỉ thay đổi người.",
+example:"Pixar «Braintrust meetings»: sau mỗi giai đoạn phát triển phim, một nhóm đạo diễn senior xem và phản hồi thẳng thắn — không có quyền ra lệnh, chỉ cho feedback. Đây là cơ chế double-loop learning được institutionalize: không phải fix người, mà fix quá trình sáng tạo.",
+takeaway:"Sau mỗi quyết định quan trọng (thành công hoặc thất bại), tổ chức <strong>AAR đơn giản</strong>: «Điều gì xảy ra? Điều gì kỳ vọng? Tại sao khác biệt? Thay đổi gì cho lần sau?» Quan trọng: <strong>thay đổi system</strong> (checklist, quy trình, cấu trúc), không chỉ nói «làm tốt hơn»."},
+
+{cat:"nhom",vi:"Ủy quyền và phân cấp quyết định",en:"Decision Delegation and Decentralization",
+short:"Ra quyết định tốt không đồng nghĩa với CEO quyết định tất cả — <strong>ủy quyền đúng cấp độ</strong> giúp quyết định nhanh hơn, tốt hơn (người gần vấn đề biết nhiều hơn) và phát triển năng lực tổ chức.",
+detail:"Nguyên tắc <strong>«subsidiarity»</strong> (từ triết học chính trị): quyết định nên được ra ở cấp thấp nhất có đủ năng lực và thông tin. Jeff Bezos: CEO chỉ nên ra ~3 quyết định quan trọng mỗi năm — phần còn lại nên được ủy quyền xuống. Điều kiện để ủy quyền hiệu quả: (1) <strong>Alignment về mục tiêu và giá trị</strong> — người được ủy quyền hiểu «tại sao» không chỉ «cái gì»; (2) <strong>Năng lực</strong> — có kiến thức và kỹ năng phù hợp; (3) <strong>Thông tin</strong> — có đủ context để ra quyết định tốt; (4) <strong>Feedback mechanism</strong> — biết khi nào cần escalate. Lỗi phổ biến: ủy quyền công việc nhưng giữ quyết định — «delegating tasks without delegating authority».",
+example:"Netflix không có policy handbook dày — thay vào đó, Hastings tóm tắt trong câu: «Act in Netflix's best interest.» Ủy quyền dựa trên văn hóa và judgment, không phải rules. Kết quả: quyết định nhanh hơn và thường tốt hơn vì người gần vấn đề nhất ra quyết định.",
+takeaway:"Với mỗi loại quyết định thường xuyên, hỏi: <strong>«Ai là người gần vấn đề nhất và có đủ năng lực? Tôi có thể ủy quyền không?»</strong> Ủy quyền thực sự nghĩa là: họ ra quyết định, không cần hỏi lại — và bạn chịu trách nhiệm về kết quả."},
+
+{cat:"nhom",vi:"Văn hóa quyết định của tổ chức",en:"Organizational Decision Culture",
+short:"Văn hóa tổ chức quyết định ai được phép nói thật, ai được phép sai, và điều gì thực sự được khen thưởng — <strong>văn hóa quyết định (decision culture)</strong> ảnh hưởng lớn hơn mọi công cụ hay quy trình.",
+detail:"Amy Edmondson («The Fearless Organization»): <strong>psychological safety</strong> — tin rằng nêu ý kiến, thừa nhận lỗi hay thách thức sếp sẽ không có hậu quả tiêu cực — là điều kiện tiên quyết cho quyết định nhóm chất lượng cao. Không có nó: (1) Thông tin quan trọng bị giữ lại; (2) Lỗi bị che giấu thay vì học hỏi; (3) «Điều mọi người biết nhưng không ai nói» tích tụ. Google Project Aristotle: nhân tố số 1 quyết định hiệu quả team là psychological safety, không phải trí tuệ cá nhân. Văn hóa quyết định tốt: thưởng cho decision process tốt, không chỉ kết quả tốt; normalize «I was wrong»; bảo vệ «bearers of bad news».",
+example:"NASA sau Challenger (1986): kỹ sư đã cảnh báo về O-ring trong thời tiết lạnh nhưng bị bỏ qua bởi áp lực lịch trình và văn hóa «không được làm chậm chương trình». Đây không phải lỗi kỹ thuật — mà là lỗi văn hóa quyết định. Columbia (2003): lỗi tương tự. Bài học: thay đổi quy trình không đủ nếu không thay đổi văn hóa.",
+takeaway:"Tự đánh giá tổ chức: <strong>«Người cuối cùng muốn nói tin xấu với sếp là ai? Họ có sợ hậu quả không?»</strong> Nếu có — đây là dấu hiệu văn hóa quyết định có vấn đề. Hành động đầu tiên: khen ngợi công khai người mang tin xấu trước khi khen người mang tin tốt."},// ===== BỔ SUNG: KHUNG & ĐỊNH NGHĨA VẤN ĐỀ (+5) =====
+{cat:"khung",vi:"Kỹ thuật 5 Whys",en:"5 Whys Technique",
+short:"Hỏi <strong>«Tại sao?»</strong> liên tiếp 5 lần để đào sâu từ triệu chứng bề mặt đến nguyên nhân gốc rễ (<strong>root cause</strong>) thực sự. Được Toyota phát triển, áp dụng trong mọi lĩnh vực.",
+detail:"Taiichi Ohno (Toyota) phát triển kỹ thuật này như một phần của <strong>Toyota Production System</strong>. Nguyên lý: câu hỏi «Tại sao?» đầu tiên thường chỉ đến nguyên nhân trực tiếp, không phải nguyên nhân gốc. Con số 5 không cứng nhắc — có thể cần 3 lần hoặc 7 lần tùy vấn đề. Điều quan trọng: mỗi câu trả lời phải dựa trên <strong>bằng chứng thực tế</strong>, không phải giả định. Cạm bẫy phổ biến: (1) Dừng quá sớm khi chạm nguyên nhân «tiện lợi»; (2) Mỗi «tại sao» có thể dẫn đến nhiều nhánh — phải chọn nhánh đúng; (3) Thiếu dữ liệu khiến câu trả lời chỉ là phỏng đoán.",
+example:"Máy sản xuất dừng đột ngột. Tại sao? → Cầu dao điện ngắt. Tại sao? → Quá tải dòng điện. Tại sao? → Motor bơm bị kẹt. Tại sao? → Không được bôi trơn đúng định kỳ. Tại sao? → Không có lịch bảo trì định kỳ. → Root cause: <strong>thiếu hệ thống bảo trì phòng ngừa</strong>. Giải pháp: thiết lập lịch bảo trì, không chỉ thay cầu dao.",
+takeaway:"Khi gặp vấn đề, <strong>đừng dừng lại ở câu trả lời đầu tiên</strong>. Tiếp tục hỏi «Tại sao?» cho đến khi đạt đến nguyên nhân bạn có thể thực sự kiểm soát và thay đổi — không phải chỉ vá lỗi bề mặt."},
+
+{cat:"khung",vi:"Phân tích nguyên nhân gốc rễ",en:"Root Cause Analysis",
+short:"Phương pháp luận có hệ thống để tìm <strong>nguyên nhân gốc rễ (root cause)</strong> của vấn đề — không phải giải quyết triệu chứng mà giải quyết nguyên nhân nền tảng để vấn đề không tái phát.",
+detail:"<strong>RCA (Root Cause Analysis)</strong> bao gồm nhiều công cụ: 5 Whys, Fishbone/Ishikawa diagram, Fault Tree Analysis, Pareto analysis. Nguyên tắc: phân biệt giữa (1) <strong>Immediate cause</strong> — điều trực tiếp gây ra vấn đề; (2) <strong>Contributing factors</strong> — điều kiện tạo điều kiện cho vấn đề; (3) <strong>Root cause</strong> — nguyên nhân nền tảng. Ứng dụng rộng: y tế (patient safety), hàng không (accident investigation), phần mềm (post-mortem). Điều kiện thành công: môi trường <strong>«blameless post-mortem»</strong> — tìm nguyên nhân hệ thống, không phán xét cá nhân.",
+example:"Website down 3 giờ. Immediate cause: server quá tải. Contributing factor: không có auto-scaling. Root cause: không có quy trình load testing trước khi release tính năng mới gây traffic spike. Nếu chỉ fix server (immediate), vấn đề sẽ tái phát. Fix root cause: xây dựng quy trình load testing bắt buộc.",
+takeaway:"Sau mỗi sự cố quan trọng, tổ chức <strong>blameless post-mortem</strong> với câu hỏi: «Hệ thống/quy trình nào cho phép điều này xảy ra?» — không phải «Ai đã làm sai?» Ghi lại root cause và action items để ngăn tái phát."},
+
+{cat:"khung",vi:"Phân rã vấn đề (MECE)",en:"Problem Decomposition (MECE)",
+short:"Chia vấn đề lớn thành các phần nhỏ hơn theo nguyên tắc <strong>MECE: Mutually Exclusive (loại trừ lẫn nhau)</strong> và <strong>Collectively Exhaustive (toàn diện)</strong> — không trùng lặp, không bỏ sót.",
+detail:"MECE là nền tảng tư duy phân tích của McKinsey và các công ty tư vấn chiến lược hàng đầu. Mutually Exclusive: các phần không chồng lấp lên nhau — tránh tính hai lần. Collectively Exhaustive: tổng các phần bao phủ toàn bộ vấn đề — không bỏ sót. Tại sao quan trọng: khi phần bị bỏ sót, kết luận phân tích thiếu; khi phần chồng lấp, tính toán sai. Công cụ: <strong>Issue Tree (cây vấn đề)</strong> — phân rã từ trên xuống; <strong>Hypothesis Tree</strong> — đặt giả thuyết rồi kiểm tra. Ứng dụng: phân tích doanh thu = số lượng × đơn giá (MECE); phân tích chi phí = biến đổi + cố định (MECE).",
+example:"Phân tích «tại sao lợi nhuận giảm» theo MECE: Doanh thu giảm (có thể do: số đơn giảm HOẶC đơn giá giảm) VÀ/HOẶC Chi phí tăng (biến đổi HOẶC cố định). Mỗi nhánh loại trừ nhau, cộng lại bao phủ toàn bộ. So sánh với phân chia không MECE: «marketing kém», «sản phẩm xấu», «thị trường khó» — chồng lấp, không bao phủ.",
+takeaway:"Trước khi phân tích vấn đề phức tạp, <strong>vẽ cây vấn đề theo MECE</strong>. Kiểm tra: (1) Các nhánh có chồng lấp không? (2) Các nhánh cộng lại có bao phủ toàn bộ vấn đề không? Nếu không — cấu trúc phân tích sẽ tạo ra điểm mù."},
+
+{cat:"khung",vi:"Xác định điều kiện thành công",en:"Defining Success Conditions",
+short:"Trước khi quyết định, làm rõ: <strong>thành công trông như thế nào?</strong> Xác định tiêu chí đo lường cụ thể, timeline, và ai là người đánh giá — tránh «goalpost moving» sau khi biết kết quả.",
+detail:"<strong>«Goalpost moving»</strong> là khi tiêu chí thành công bị thay đổi sau khi kết quả không như kỳ vọng — để bảo toàn cái tôi hoặc ngân sách. Ngăn chặn bằng: định nghĩa thành công TRƯỚC khi bắt đầu, viết ra, và cam kết công khai. Framework OKR (Objectives & Key Results) của Google là một cách làm rõ tiêu chí thành công. Phân biệt: (1) <strong>Leading indicators</strong> — dấu hiệu sớm của thành công trong quá trình; (2) <strong>Lagging indicators</strong> — kết quả cuối cùng. Đặt cả hai giúp phát hiện sớm khi đang đi sai hướng.",
+example:"Trước khi launch chiến dịch marketing 6 tháng: viết xuống «Thành công = tỷ lệ chuyển đổi tăng từ 2% lên 3,5% và CAC giảm 15% trong 6 tháng». Sau 3 tháng, tỷ lệ chuyển đổi tăng nhưng CAC không giảm — biết cần điều chỉnh chiến thuật ngay, thay vì chỉ phát hiện khi kết thúc 6 tháng.",
+takeaway:"Trước mọi dự án hoặc quyết định lớn: <strong>viết ra «definition of success» cụ thể, có số đo và timeline</strong>. Ký tên vào đó cùng với stakeholders. Nếu sau này muốn thay đổi tiêu chí — phải thảo luận công khai, không âm thầm dịch chuyển."},
+
+{cat:"khung",vi:"Tư duy từ tương lai ngược về hiện tại",en:"Backcasting",
+short:"<strong>Backcasting</strong>: hình dung trạng thái tương lai mong muốn một cách rõ ràng, sau đó làm ngược lại — xác định những bước cần thực hiện từ hiện tại để đến được điểm đó.",
+detail:"Khác với <strong>forecasting</strong> (dự báo tương lai từ xu hướng hiện tại), backcasting bắt đầu từ đích và làm ngược lại. Phương pháp này đặc biệt hữu ích khi: (1) Tương lai mong muốn rất khác với xu hướng hiện tại; (2) Cần thay đổi mang tính đột phá, không phải cải tiến dần dần. Quy trình: (1) Định nghĩa rõ trạng thái thành công mong muốn; (2) Hỏi «Điều gì phải xảy ra NGAY TRƯỚC đó?»; (3) Tiếp tục lùi lại đến hiện tại. Jeff Bezos dùng biến thể này: <strong>«Working backwards»</strong> — viết press release tương lai trước khi bắt đầu dự án.",
+example:"Mục tiêu: công ty đạt doanh thu 100 tỷ trong 5 năm. Backcasting: Năm 5 → cần 50 khách hàng lớn. Năm 4 → cần pipeline 100 khách đang negotiate. Năm 3 → cần 5 case study thuyết phục. Năm 2 → cần 3 pilot thành công. Năm 1 → cần 1 pilot đầu tiên, tuyển sales team core. Hôm nay → xác định 10 potential pilot customers.",
+takeaway:"Khi mục tiêu dài hạn trông quá xa vời, <strong>dùng backcasting</strong>: viết «ngày X trong tương lai, chúng ta đã đạt được Y». Sau đó hỏi từng bước ngược về hiện tại: «Điều gì phải đúng ngay trước đó?» Chuỗi backward steps này trở thành roadmap hành động."},
+
+// ===== BỔ SUNG: THU THẬP & ĐÁNH GIÁ THÔNG TIN (+5) =====
+{cat:"thongtin",vi:"Bộ lọc thông tin",en:"Information Filtering",
+short:"Trong thế giới thông tin dư thừa, kỹ năng quan trọng không phải là <strong>thu thập nhiều hơn</strong> mà là <strong>lọc đúng hơn</strong> — xác định loại thông tin nào thực sự cần cho quyết định cụ thể.",
+detail:"Charlie Munger: <strong>«Tôi không muốn đọc tất cả. Tôi muốn đọc thứ tốt nhất.»</strong> Framework lọc thông tin cho quyết định: (1) <strong>Decision-relevant</strong>: thông tin này có thực sự ảnh hưởng quyết định không? (2) <strong>Reliable</strong>: nguồn có đáng tin không? Phương pháp thu thập hay suy diễn? (3) <strong>Timely</strong>: thông tin có còn cập nhật không? (4) <strong>Actionable</strong>: có thể làm gì khác nhau với thông tin này? Cạm bẫy: <strong>«infovoyeurism»</strong> — thu thập thông tin vì thú vị, không phải vì hữu ích cho quyết định. Analysis paralysis thường do không lọc được thông tin nào thực sự quyết định.",
+example:"Trước khi ra quyết định đầu tư vào thị trường mới, team thu thập 200 trang báo cáo thị trường. Sau khi áp dụng bộ lọc: chỉ có 3 câu hỏi thực sự quyết định: (1) Quy mô thị trường; (2) Ai là đối thủ chính và barrier to entry; (3) Liệu mô hình hiện tại có thể adapt không. 90% báo cáo không trả lời 3 câu hỏi này.",
+takeaway:"Trước khi nghiên cứu, viết ra: <strong>«3-5 câu hỏi cụ thể mà câu trả lời sẽ thay đổi quyết định của tôi»</strong>. Chỉ tìm kiếm thông tin trả lời những câu hỏi đó. Khi tìm thấy câu trả lời — dừng lại."},
+
+{cat:"thongtin",vi:"Nguồn thông tin và độ tin cậy",en:"Source Credibility",
+short:"Không phải mọi thông tin đều có giá trị ngang nhau. Đánh giá <strong>độ tin cậy nguồn thông tin</strong> dựa trên: phương pháp thu thập, động cơ của nguồn, lịch sử độ chính xác, và khả năng tự xác nhận.",
+detail:"Framework đánh giá nguồn thông tin (SIFT — Stop, Investigate, Find better sources, Trace claims): (1) <strong>Stop</strong>: dừng phản ứng tự động với thông tin; (2) <strong>Investigate the source</strong>: ai tạo ra thông tin này và tại sao?; (3) <strong>Find better coverage</strong>: nguồn độc lập nào xác nhận?; (4) <strong>Trace claims</strong>: thông tin gốc ở đâu, qua bao nhiêu trung gian? Đặc biệt cảnh giác với: <strong>conflict of interest</strong> (nghiên cứu do bên có lợi tài trợ), <strong>small sample sizes</strong>, <strong>cherry-picking data</strong>, và thông tin qua nhiều trung gian bị méo mó.",
+example:"Một báo cáo tư vấn kết luận «thị trường X sẽ tăng 300% trong 5 năm». Truy nguồn: báo cáo do công ty muốn bán sản phẩm cho thị trường X tài trợ; sample size 50 người; không có peer review. Độ tin cậy: thấp. So với: nghiên cứu độc lập từ 3 nguồn khác nhau, phương pháp rõ ràng, kết quả nhất quán → độ tin cậy cao hơn nhiều.",
+takeaway:"Với mọi thông tin quan trọng, hỏi: <strong>«Ai tạo ra điều này và có động cơ gì? Phương pháp thu thập là gì? Nguồn độc lập nào xác nhận?»</strong> Đặc biệt hoài nghi với thông tin «đúng y những gì bạn muốn nghe»."},
+
+{cat:"thongtin",vi:"Tư duy phản biện và kiểm tra giả định",en:"Critical Thinking and Assumption Testing",
+short:"Mọi phân tích đều dựa trên <strong>giả định ẩn (hidden assumptions)</strong>. Tư duy phản biện là kỹ năng tìm và kiểm tra những giả định đó thay vì chấp nhận chúng như sự thật hiển nhiên.",
+detail:"Một quyết định chỉ đúng khi giả định của nó đúng. Các giả định nguy hiểm nhất là những thứ <strong>không ai nhận ra là giả định</strong> — chúng được coi là «sự thật hiển nhiên». Kỹ thuật nhận diện giả định: (1) «<strong>Ladder of Inference</strong>» của Chris Argyris — truy ngược từ hành động → kết luận → giả định → dữ liệu được chọn; (2) <strong>Pre-mortem</strong>: giả định nào nếu sai sẽ làm dự án thất bại?; (3) Hỏi «Điều gì phải đúng để phân tích này hợp lệ?». Nguyên tắc: giả định càng quan trọng và càng ít chắc chắn thì càng cần được kiểm tra sớm.",
+example:"Startup giả định «khách hàng sẵn sàng trả 500k/tháng» mà không kiểm tra. Xây sản phẩm 8 tháng rồi launch. Kết quả: khách hàng chỉ sẵn sàng trả 150k. Nếu kiểm tra giả định giá từ tháng 1 bằng landing page đơn giản (chi phí: 2 ngày), đã biết từ sớm và điều chỉnh mô hình.",
+takeaway:"Trước dự án lớn, liệt kê <strong>top 5 giả định quan trọng nhất</strong>. Với từng giả định: «Nếu điều này sai, hậu quả là gì? Làm thế nào kiểm tra nó với chi phí thấp nhất?» Kiểm tra giả định rủi ro cao nhất trước, trước khi cam kết nguồn lực lớn."},
+
+{cat:"thongtin",vi:"Giá trị thông tin",en:"Value of Information",
+short:"Không phải mọi thông tin đều đáng để thu thập. <strong>Giá trị thông tin (Value of Information — VoI)</strong> là câu hỏi: quyết định của tôi sẽ thay đổi thế nào nếu có thêm thông tin này, và cái giá để lấy nó có đáng không?",
+detail:"VoI là khái niệm từ lý thuyết quyết định: <strong>EVPI (Expected Value of Perfect Information)</strong> — giá trị kỳ vọng của thông tin hoàn hảo là giới hạn trên cho chi phí nghiên cứu. Nếu nghiên cứu tốn 100 triệu nhưng EVPI chỉ là 50 triệu — không đáng. Áp dụng thực tế: (1) <strong>Nếu quyết định không thay đổi</strong> dù thông tin thêm cho thấy điều gì — thông tin đó có giá trị bằng 0; (2) <strong>Nếu quyết định chỉ thay đổi trong một kịch bản rất không có khả năng</strong> — giá trị thấp; (3) Nếu thông tin sẽ thay đổi quyết định trong kịch bản có xác suất cao — giá trị cao. Hỏi: «Nếu câu trả lời là A, tôi làm X. Nếu B, tôi làm Y. Nếu A và Y giống nhau — không cần biết câu trả lời».",
+example:"Cân nhắc thuê tư vấn 500 triệu để nghiên cứu thị trường. Hỏi: «Nếu kết quả nghiên cứu là tích cực, chúng ta sẽ tiến hành dự án. Nếu tiêu cực, chúng ta vẫn tiến hành vì đã cam kết với ban lãnh đạo?» Nếu câu trả lời là vẫn tiến hành bất kể — nghiên cứu không có VoI, không đáng mua.",
+takeaway:"Trước khi thu thập thêm thông tin (nghiên cứu, tư vấn, khảo sát), hỏi: <strong>«Nếu kết quả là X, tôi sẽ làm gì? Nếu Y, tôi sẽ làm gì?» Nếu câu trả lời giống nhau cho mọi kết quả</strong> — tiết kiệm thời gian và tiền, ra quyết định ngay."},
+
+{cat:"thongtin",vi:"Khung thời gian và ngưỡng quyết định",en:"Decision Threshold and Time Horizon",
+short:"Biết rõ <strong>khi nào cần ra quyết định</strong> và <strong>bao nhiêu thông tin là đủ</strong> — tránh hai bẫy đối lập: quyết định quá sớm thiếu thông tin và trì hoãn quá lâu vì không bao giờ «có đủ thông tin».",
+detail:"General Colin Powell dùng quy tắc <strong>«40-70 rule»</strong>: ra quyết định khi có từ 40% đến 70% thông tin cần thiết. Ít hơn 40% — quá liều lĩnh; hơn 70% — đã mất cơ hội vì chờ quá lâu. Xác định ngưỡng quyết định phụ thuộc vào: (1) <strong>Chi phí của quyết định sai</strong>; (2) <strong>Chi phí của trì hoãn</strong>; (3) <strong>Khả năng hoàn tác</strong>. Quyết định reversible với chi phí thấp → ngưỡng thấp, quyết định nhanh. Quyết định irreversible với chi phí cao → ngưỡng cao hơn, cần thêm thông tin.",
+example:"Startup cân nhắc pivot mô hình kinh doanh. Nếu chờ «đủ data» có thể mất 6 tháng trong khi tiền đang cạn. Áp dụng 40-70 rule: sau 3 tháng đã có 60% tín hiệu rõ ràng về hướng pivot → ra quyết định ngay với contingency plan nếu sai. So với: công ty lớn quyết định đóng cửa nhà máy — cần 80%+ thông tin trước khi quyết định irreversible.",
+takeaway:"Trước mỗi quyết định, xác định: <strong>«Ngưỡng thông tin của tôi là bao nhiêu %? Deadline tự nhiên của quyết định này là khi nào?»</strong> Đặt hạn chót rõ ràng: «Tôi sẽ ra quyết định vào ngày X dù có đủ thông tin hay không» — để tránh trì hoãn vô hạn."},
+
+// ===== BỔ SUNG: MÔ HÌNH & CÔNG CỤ (+4) =====
+{cat:"congcu",vi:"Phân tích lựa chọn theo kịch bản",en:"Options Analysis",
+short:"Thay vì so sánh giữa «làm A» và «không làm A», cấu trúc hóa quyết định thành <strong>tập hợp lựa chọn thực sự</strong> — ít nhất 3-4 phương án khác biệt về bản chất, không chỉ là biến thể của nhau.",
+detail:"Nhiều quyết định bị giới hạn ngay từ đầu bởi <strong>«false dichotomy»</strong> — chỉ nhìn thấy hai lựa chọn khi thực ra có nhiều hơn. Kỹ thuật mở rộng options: (1) <strong>«And/Or»</strong> — không phải «mua hay thuê» mà «mua, thuê, leasing, hay hợp tác»; (2) <strong>«Multitrack»</strong> — theo đuổi 2-3 options song song trong giai đoạn khám phá; (3) <strong>«Bright lines»</strong> — xác định điều tuyệt đối không làm để thu hẹp không gian; (4) <strong>«Creative options»</strong> — hỏi «nếu không bị ràng buộc bởi X, tôi sẽ làm gì?» Một quyết định tốt cần ít nhất một lựa chọn mà bạn không thoải mái nhưng phải xem xét nghiêm túc.",
+example:"Startup đang cân nhắc «mở rộng ra thị trường Mỹ hay không». False dichotomy. Options đầy đủ hơn: (1) Không mở rộng, tập trung VN; (2) Mở văn phòng Mỹ toàn diện; (3) Hợp tác với reseller địa phương; (4) Remote-first với 1 BD; (5) Pilot với 2 khách hàng Mỹ mà không có chi phí cố định. Phân tích 5 options cho thấy option 5 là cách test assumption với chi phí thấp nhất.",
+takeaway:"Khi xây dựng options cho quyết định, <strong>đừng dừng lại ở 2 lựa chọn</strong>. Chủ động tạo ít nhất 3-4 options khác biệt về bản chất. Kiểm tra: «Có option nào tôi đang tránh xem xét vì không thoải mái không? Đó thường chính là option cần xem xét kỹ nhất.»"},
+
+{cat:"congcu",vi:"Phân tích hối hận tối thiểu",en:"Regret Minimization Framework",
+short:"<strong>Regret Minimization Framework</strong> của Jeff Bezos: tưởng tượng bản thân ở tuổi 80 nhìn lại — quyết định nào sẽ ít hối hận nhất? Framework này đặc biệt hữu ích cho quyết định lớn, thay đổi cuộc đời.",
+detail:"Bezos phát triển framework này khi quyết định bỏ công việc ổn định ở phố Wall để thành lập Amazon (1994). Cơ chế: hình dung bản thân 80 tuổi nhìn lại cuộc đời — ở độ tuổi đó, bạn sẽ hối hận về những việc ĐÃ làm hay những việc KHÔNG dám làm? Nghiên cứu tâm lý học: con người thường hối hận về inaction (không dám làm) nhiều hơn action (đã làm nhưng thất bại) về dài hạn — trong khi ngắn hạn thì ngược lại. Áp dụng: đặc biệt hữu ích khi đang quá tập trung vào rủi ro ngắn hạn của action và bỏ qua hối hận dài hạn của inaction.",
+example:"Bezos tự hỏi: «Lúc 80 tuổi, tôi có hối hận vì đã thử và thất bại với Amazon không?» → Không, thất bại là học hỏi. «Tôi có hối hận vì đã không thử không?» → Có, rất hối hận. Kết quả: quyết định bỏ việc và thành lập Amazon. Framework không đảm bảo thành công, nhưng đảm bảo quyết định phù hợp với giá trị dài hạn.",
+takeaway:"Khi đứng trước quyết định lớn, đặc biệt là quyết định «có nên thử không»: <strong>hình dung bản thân 80 tuổi nhìn lại</strong>. Hỏi: «Tôi sẽ hối hận hơn vì đã thử và thất bại, hay vì đã không bao giờ thử?» — câu trả lời thường rõ ràng hơn khi có đủ khoảng cách thời gian."},
+
+{cat:"congcu",vi:"Kiểm tra phản thực tế",en:"Counterfactual Thinking",
+short:"<strong>Tư duy phản thực tế (counterfactual thinking)</strong>: hỏi «điều gì sẽ xảy ra nếu tôi chọn khác?» để đánh giá quyết định chính xác hơn, học từ kết quả, và tránh các thiên kiến nhận thức khi nhìn lại.",
+detail:"Tư duy phản thực tế là nền tảng của inference nhân quả. Trong đánh giá quyết định: để biết liệu quyết định A có tốt không, phải so sánh với kết quả của quyết định B (counterfactual) — không phải chỉ xem kết quả của A. Hai loại phản thực tế: (1) <strong>Upward counterfactual</strong> — «nếu tôi làm khác, kết quả đã tốt hơn» → tạo cảm giác tiếc nuối nhưng thúc đẩy cải thiện; (2) <strong>Downward counterfactual</strong> — «nếu tôi làm khác, kết quả đã tệ hơn» → tạo cảm giác nhẹ nhõm và biết ơn. Ứng dụng quan trọng: khi đánh giá chính sách hoặc chiến lược, luôn hỏi «so với thế giới không có chính sách này, kết quả thực sự là gì?»",
+example:"Startup ra mắt sản phẩm và đạt 10.000 users sau 6 tháng. Tốt hay xấu? Không thể biết nếu chỉ nhìn vào con số. Counterfactual: nếu không ra mắt vào thời điểm đó (chờ 6 tháng để polish hơn), có thể mất window of opportunity khi competitor ra trước. Hoặc nếu ra sớm hơn 2 tháng, có thể đã có 20.000 users. Counterfactual thinking giúp đánh giá timing decision tốt hơn.",
+takeaway:"Khi đánh giá kết quả quyết định, luôn hỏi: <strong>«Nếu tôi đã quyết định khác, kết quả có thể là gì?»</strong> Đặc biệt hữu ích để tránh survivorship bias và hindsight bias — kết quả tốt không có nghĩa là quyết định tốt nếu alternative cũng sẽ cho kết quả tốt hoặc tốt hơn."},
+
+{cat:"congcu",vi:"Phân tích Điểm hòa vốn quyết định",en:"Decision Break-Even Analysis",
+short:"Xác định <strong>điểm hòa vốn (break-even)</strong> của một quyết định: ở mức xác suất hoặc kết quả nào thì hai lựa chọn cho giá trị kỳ vọng bằng nhau — giúp ra quyết định mà không cần xác định chính xác từng con số.",
+detail:"Break-even analysis trong quyết định hỏi: «Tôi không cần biết con số chính xác — chỉ cần biết liệu xác suất thực tế có cao hơn hay thấp hơn ngưỡng break-even.» Ví dụ: một khoản đầu tư đòi hỏi 40% xác suất thành công để EV dương. Câu hỏi: «Xác suất thực tế có cao hơn 40% không?» — dễ trả lời hơn «Xác suất thực sự là bao nhiêu?». Áp dụng: so sánh chi phí điều tra thêm vs giá trị của thông tin (VoI); xác định «tipping point» của assumption quan trọng nhất.",
+example:"Quyết định có nên đầu tư 5 tỷ vào R&D sản phẩm mới. Break-even: cần 15% market share để hòa vốn. Câu hỏi đơn giản hơn: «Có hợp lý khi tin rằng sản phẩm này có thể đạt 15% market share không?» thay vì phải tính chính xác xác suất là 12%, 18%, hay 25%. Nếu câu trả lời là «rõ ràng không» hoặc «rõ ràng có» — quyết định được mà không cần phân tích phức tạp hơn.",
+takeaway:"Trước khi xây mô hình phức tạp, hỏi: <strong>«Ngưỡng break-even của quyết định này là gì?»</strong> Nếu thực tế rõ ràng cao hơn hoặc thấp hơn ngưỡng đó — không cần phân tích thêm. Chỉ đầu tư phân tích kỹ khi thực tế gần với ngưỡng break-even."},
+
+// ===== BỔ SUNG: RỦI RO & BẤT ĐỊNH (+5) =====
+{cat:"ruiro",vi:"Chiến lược phòng thủ và tấn công",en:"Defensive vs Offensive Strategy Under Uncertainty",
+short:"Trong điều kiện bất định cao, có hai chiến lược ra quyết định đối lập: <strong>phòng thủ</strong> (giảm downside tối đa) và <strong>tấn công</strong> (tối đa hóa upside). Người ra quyết định giỏi biết khi nào dùng chiến lược nào.",
+detail:"Nassim Taleb: <strong>«Barbell strategy»</strong> — kết hợp phòng thủ cực đoan (giữ 90% tài sản trong tài sản cực kỳ an toàn) với tấn công táo bạo (đặt 10% vào cơ hội rủi ro cao nhưng upside không giới hạn). Tránh vùng «giữa» — rủi ro vừa phải, upside vừa phải. Trong ra quyết định tổ chức: (1) <strong>Phòng thủ trước tiên</strong>: đảm bảo tổ chức tồn tại được qua các cú sốc; (2) Sau đó <strong>tấn công táo bạo</strong> với phần nguồn lực còn lại. Không nên: dàn trải mọi thứ ở mức «trung bình».",
+example:"Startup với 12 tháng runway: phòng thủ — đảm bảo có ít nhất 6 tháng cashflow bảo toàn; tấn công — dùng 6 tháng còn lại để bet lớn vào channel acquisition chưa thử. Không nên: dàn trải đều 12 tháng vào nhiều thứ trung bình, không có gì đủ lớn để tạo ra difference.",
+takeaway:"Khi đối diện với bất định cao, <strong>tránh vùng giữa</strong>. Hỏi: «Điều gì đảm bảo chúng ta tồn tại? (Phòng thủ) — Điều gì có thể làm chúng ta thắng lớn? (Tấn công).» Phân bổ nguồn lực theo barbell: cực kỳ an toàn ở phần nền, táo bạo ở phần tăng trưởng."},
+
+{cat:"ruiro",vi:"Quản lý rủi ro đuôi",en:"Tail Risk Management",
+short:"<strong>Tail risks</strong> là các sự kiện xác suất thấp nhưng tác động thảm khốc — chúng thường bị bỏ qua trong phân tích rủi ro thông thường nhưng là nguyên nhân chính của phá sản và thảm họa lớn.",
+detail:"Quản lý tail risk không phải là dự đoán sự kiện cụ thể — mà là xây dựng hệ thống <strong>antifragile</strong> (Taleb) có thể chịu đựng bất kỳ cú sốc lớn nào, dù không biết cú sốc đó là gì. Nguyên tắc: (1) <strong>Không để một rủi ro đơn lẻ có thể «phá hủy»</strong> — tránh quá tập trung; (2) <strong>Giữ optionality</strong> — không cam kết quá mức; (3) <strong>Positive convexity</strong> — xây dựng vị thế mà khi tốt rất tốt, khi xấu chỉ thiệt hại có giới hạn; (4) <strong>Stress test thường xuyên</strong> — liên tục hỏi «điều tệ nhất có thể xảy ra là gì?»",
+example:"Lehman Brothers 2008: quản lý rủi ro tốt đối với rủi ro «bình thường» nhưng hoàn toàn không chuẩn bị cho tail risk (housing market collapse toàn quốc). Ngược lại, những quỹ đầu tư giữ position nhỏ trong các «disaster insurance» (như put options rẻ trên thị trường) — tốn ít khi thị trường bình thường nhưng kiếm lớn khi tail event xảy ra.",
+takeaway:"Với mỗi quyết định quan trọng, hỏi: <strong>«Điều gì có thể xảy ra, dù xác suất thấp, mà sẽ phá hủy hoàn toàn kết quả? Có thể giảm thiểu hậu quả của kịch bản đó với chi phí nhỏ không?»</strong> Tail risk management không phải dự đoán — là xây dựng khả năng chịu đựng."},
+
+{cat:"ruiro",vi:"Quyết định dưới bất định hoàn toàn",en:"Decision Under Deep Uncertainty",
+short:"Khi đối diện với <strong>bất định sâu (deep uncertainty)</strong> — không biết phân phối xác suất, không biết kịch bản, không có tiền lệ — các công cụ phân tích truyền thống thất bại. Cần chiến lược khác biệt.",
+detail:"Deep uncertainty (Courtney, Kirkland, Viguerie - McKinsey) xuất hiện ở 4 mức: (1) <strong>Clear future</strong> — một kịch bản chính; (2) <strong>Alternate futures</strong> — 2-3 kịch bản rõ ràng với xác suất; (3) <strong>Range of futures</strong> — dải kịch bản liên tục; (4) <strong>True ambiguity</strong> — không xác định được kịch bản. Ở mức 4, chiến lược khả thi: (1) <strong>«No-regrets moves»</strong> — hành động tốt trong mọi kịch bản; (2) <strong>«Options»</strong> — đầu tư nhỏ để giữ lựa chọn mở; (3) <strong>«Big bets»</strong> — nếu phải chọn, chọn kịch bản có lý nhất và cam kết. Sai lầm: giả vờ deep uncertainty là loại 1 hay 2 và áp dụng công cụ phân tích sai.",
+example:"COVID-19 tháng 2/2020: không ai có mô hình xác suất đáng tin. Deep uncertainty thực sự. «No-regrets move» cho mọi kịch bản: tăng cường vệ sinh, giảm tụ tập, tăng dự trữ. Chi phí thấp nếu COVID không nghiêm trọng; bảo vệ lớn nếu nghiêm trọng. Options: chuẩn bị kịch bản làm việc từ xa — chi phí thấp, flexibility cao.",
+takeaway:"Khi gặp bất định cực cao, hỏi: <strong>«No-regrets moves của tôi là gì — hành động tốt trong MỌI kịch bản?»</strong> Thực hiện những điều đó ngay. Sau đó giữ options mở thay vì cam kết sớm vào một kịch bản cụ thể."},
+
+{cat:"ruiro",vi:"Phân tích «điều gì có thể sai»",en:"Pre-mortem Analysis",
+short:"<strong>Pre-mortem</strong>: trước khi bắt đầu dự án, tưởng tượng nó đã THẤT BẠI hoàn toàn sau 1 năm — và hỏi «Tại sao nó thất bại?» Kỹ thuật này giúp phát hiện rủi ro ẩn mà optimism bias thường che khuất.",
+detail:"Gary Klein phát triển pre-mortem như một biện pháp chống lại <strong>«planning fallacy»</strong> và <strong>overconfidence</strong>. Cơ chế: khi nhóm đã commit vào một kế hoạch, hầu hết người không muốn nêu lên lo ngại vì sợ bị coi là tiêu cực. Pre-mortem tạo ra <strong>«licensed dissent»</strong> — được phép (và được khuyến khích) tìm vấn đề. Khác với brainstorm rủi ro thông thường: pre-mortem hỏi «nó ĐÃ thất bại» (quá khứ) không phải «nó CÓ THỂ thất bại» (giả thuyết) — tạo ra state of mind khác, phát hiện rủi ro cụ thể hơn. Daniel Kahneman coi pre-mortem là công cụ giảm thiểu overconfidence hiệu quả nhất ông biết.",
+example:"Trước khi launch sản phẩm mới, PM tổ chức 30-minute pre-mortem: «Giả sử 12 tháng nữa, sản phẩm này đã thất bại hoàn toàn. Mỗi người viết ra 3 lý do tại sao.» Kết quả: phát hiện 2 rủi ro quan trọng chưa ai đề cập — dependency vào API của bên thứ 3 không ổn định, và legal issue với một tính năng cụ thể. Cả hai được xử lý trước launch.",
+takeaway:"Trước mọi dự án quan trọng, <strong>tổ chức pre-mortem 20-30 phút</strong>: yêu cầu mỗi người viết ra lý do thất bại trước khi chia sẻ với nhóm. Thu thập anonymous, tổng hợp, và xử lý top risks ngay lập tức. Đây là đầu tư thời gian có ROI cao nhất trong quản lý rủi ro."},
+
+{cat:"ruiro",vi:"Nguyên tắc phòng ngừa",en:"Precautionary Principle",
+short:"<strong>Nguyên tắc phòng ngừa (precautionary principle)</strong>: khi hành động có nguy cơ gây hại không thể phục hồi và bằng chứng khoa học chưa chắc chắn — gánh nặng chứng minh thuộc về bên muốn hành động, không phải bên muốn phòng ngừa.",
+detail:"Nguyên tắc này xuất phát từ chính sách môi trường và y tế nhưng áp dụng rộng hơn. Hai phiên bản: (1) <strong>Weak</strong> — thiếu bằng chứng không đủ để biện minh cho quy định; (2) <strong>Strong</strong> — thiếu chắc chắn không đủ để cho phép hành động tiềm ẩn rủi ro. Khi áp dụng: phù hợp với quyết định mà (1) hậu quả không thể phục hồi; (2) bằng chứng chưa đủ. Không phù hợp khi: rủi ro của không hành động cũng lớn tương đương (paralysis); hoặc hành động không có hậu quả không thể phục hồi. Taleb: áp dụng precautionary principle đặc biệt khi <strong>rủi ro có tính hệ thống</strong> (ảnh hưởng đến toàn bộ hệ thống, không thể đa dạng hóa).",
+example:"Thử nghiệm công nghệ gene editing (CRISPR) trên người: bằng chứng tích cực nhưng hậu quả dài hạn không biết — precautionary principle đúng, cần thử nghiệm từng bước có kiểm soát. Ngược lại: áp dụng precautionary principle quá rộng với vaccine COVID-19 (hậu quả của không có vaccine rõ ràng nghiêm trọng hơn rủi ro thử nghiệm) — là sai.",
+takeaway:"Áp dụng <strong>precautionary principle khi và chỉ khi</strong>: (1) Rủi ro tiềm năng là irreversible và catastrophic; (2) Bằng chứng chưa chắc chắn. Hỏi: <strong>«Nếu điều này đi sai và không thể sửa được — hậu quả có thể chấp nhận không?»</strong> Nếu không — áp dụng precautionary principle."},
+
+// ===== BỔ SUNG: TÂM LÝ & CẢM XÚC (+4) =====
+{cat:"tamly",vi:"Hiệu ứng IKEA và sở hữu",en:"IKEA Effect and Endowment Effect",
+short:"<strong>IKEA effect</strong>: chúng ta đánh giá cao hơn những thứ mình đã bỏ công sức tạo ra. <strong>Endowment effect</strong>: chúng ta đánh giá cao hơn những thứ mình đang sở hữu so với khi chưa có chúng.",
+detail:"Michael Norton nghiên cứu IKEA effect: người lắp ráp tự thấy sản phẩm của mình có giá trị cao hơn sản phẩm giống hệt do người khác lắp. Endowment effect: Thaler và Kahneman — người ta đòi giá cao gấp đôi khi bán thứ mình có so với khi mua tương đương. Cả hai biểu hiện của <strong>loss aversion</strong>. Hậu quả trong quyết định: (1) Đánh giá quá cao ý tưởng/kế hoạch mình tự xây dựng; (2) Khó từ bỏ dự án/cổ phiếu mình đang «sở hữu» dù nên dừng; (3) Kháng cự với giải pháp của người khác dù tốt hơn. Biện pháp: đặt câu hỏi «nếu tôi không phải người xây cái này, tôi có đánh giá nó tốt như vậy không?»",
+example:"Team đã dành 3 tháng xây một feature. Product review cho thấy feature không được dùng nhiều và nên cắt. Team phản đối: «chúng ta đã bỏ quá nhiều công sức» (sunk cost + IKEA effect kết hợp). CEO hỏi: «Nếu một team khác đề xuất feature này hôm nay và chúng ta chưa bao giờ làm — chúng ta có approve không?» Câu trả lời: không. Quyết định: cắt feature.",
+takeaway:"Khi đánh giá dự án của mình hoặc thứ mình đang sở hữu, luôn hỏi: <strong>«Nếu tôi không phải người tạo ra / không sở hữu thứ này — tôi có đánh giá nó khách quan như thế không?»</strong> Nếu câu trả lời là thấp hơn — IKEA/endowment effect đang can thiệp."},
+
+{cat:"tamly",vi:"Tư duy tách biệt cái tôi khỏi quyết định",en:"Ego Detachment in Decisions",
+short:"Khi quyết định gắn liền với <strong>cái tôi (ego)</strong>, chất lượng suy nghĩ giảm mạnh — người ta bảo vệ quyết định cũ thay vì đánh giá thực chất, né tránh nhận sai để bảo toàn hình ảnh bản thân.",
+detail:"Ray Dalio («Principles»): <strong>«ego barrier»</strong> là một trong hai trở ngại lớn nhất cho ra quyết định tốt (cùng với blind spots). Khi cái tôi bị đe dọa, não chuyển từ chế độ «tìm sự thật» sang chế độ «bảo vệ hình ảnh» — và chúng ta không nhận ra điều này đang xảy ra. Biểu hiện: (1) Tranh luận để «thắng», không phải để tìm sự thật; (2) Không thể nói «tôi không biết» hay «tôi đã sai»; (3) Né tránh feedback tiêu cực. Biện pháp: tách biệt «tôi là người ra quyết định này» với «quyết định này có đúng không»; thực hành nói «tôi có thể sai» thường xuyên.",
+example:"Một nhà quản lý đề xuất chiến lược A trong cuộc họp. Khi team đề xuất chiến lược B tốt hơn, ông tranh luận bảo vệ A — không phải vì tin A tốt hơn, mà vì đã «commit» công khai với A và thay đổi cảm thấy như «thất bại». Kết quả: team tiến hành A, dự án kém hiệu quả, và cơ hội tốt hơn bị bỏ lỡ.",
+takeaway:"Thực hành nói thường xuyên: <strong>«Tôi có thể sai.» «Cảm ơn đã chỉ ra điều đó.» «B có vẻ tốt hơn A — hãy dùng B.»</strong> Khi nhận ra mình đang tranh luận để «thắng» thay vì tìm sự thật — dừng lại và hỏi: «Điều gì thực sự tốt nhất cho kết quả?»"},
+
+{cat:"tamly",vi:"Ảnh hưởng của câu chuyện và narrative",en:"Narrative Bias",
+short:"Não người xử lý thông tin dưới dạng <strong>câu chuyện (narratives)</strong> tốt hơn dữ liệu thuần túy — nhưng điều này cũng có nghĩa là một câu chuyện thuyết phục có thể đánh bại bằng chứng thực tế.",
+detail:"<strong>Narrative bias</strong>: xu hướng ưu tiên thông tin ăn khớp với câu chuyện logic và nhất quán, ngay cả khi bằng chứng thống kê cho thấy khác. Nassim Taleb gọi đây là <strong>«narrative fallacy»</strong> — chúng ta thích giải thích nhân quả đơn giản hơn thực tế phức tạp. Hậu quả: (1) Case studies ảnh hưởng quyết định mạnh hơn base rates; (2) «Người có story hay» thuyết phục được dù thiếu bằng chứng; (3) Chúng ta nhớ exceptions với narrative mạnh hơn quy luật phổ biến nhưng nhàm chán. Biện pháp: tách phần «câu chuyện» và phần «dữ liệu» trong mọi proposal; hỏi «nếu bỏ câu chuyện đi, dữ liệu có thuyết phục không?»",
+example:"Hai startup pitch investor: (A) dữ liệu tốt hơn nhưng trình bày khô khan; (B) câu chuyện về founder thuyết phục và market narrative hấp dẫn nhưng unit economics yếu hơn. Nhiều investor chọn B — narrative bias đang chi phối. Sau 3 năm, A thành công, B thất bại do unit economics thực sự quan trọng hơn narrative.",
+takeaway:"Khi bị thuyết phục bởi một câu chuyện hấp dẫn, dừng lại và hỏi: <strong>«Nếu bỏ narrative đi, dữ liệu và bằng chứng thuần túy có ủng hộ kết luận này không?»</strong> Đặc biệt hoài nghi với câu chuyện «quá hay» — thường là dấu hiệu narrative đang lấp đầy khoảng trống thiếu bằng chứng."},
+
+{cat:"tamly",vi:"Thực hành quyết định có chủ đích",en:"Deliberate Decision Practice",
+short:"Như bất kỳ kỹ năng nào, <strong>ra quyết định có thể luyện tập và cải thiện có chủ đích</strong> — không phải bằng cách ra nhiều quyết định hơn mà bằng cách phản hồi có cấu trúc về từng quyết định.",
+detail:"Anders Ericsson («Peak»): <strong>«deliberate practice»</strong> — luyện tập có chủ đích đòi hỏi: (1) Nhiệm vụ cụ thể ngay ở ranh giới năng lực; (2) Feedback tức thời và rõ ràng; (3) Lặp lại; (4) Sự điều chỉnh có ý thức. Áp dụng vào ra quyết định: feedback tức thời hiếm khi có — đây là lý do cần nhật ký quyết định. Luyện tập có chủ đích cho ra quyết định: (1) Xác định thiên kiến đang ảnh hưởng nhiều nhất đến mình; (2) Thiết kế quy trình chống lại thiên kiến đó; (3) Review mỗi tuần; (4) Dần chuyển sang thiên kiến tiếp theo. Không cố cải thiện tất cả cùng lúc.",
+example:"Một PM nhận ra qua nhật ký quyết định rằng mình thường overestimate timeline và underestimate complexity. Luyện tập có chủ đích: trong 1 tháng, với mọi estimate, áp dụng «reference class forecasting» (so với base rate của dự án tương tự) và cộng thêm 50% buffer. Review cuối tháng để đánh giá độ chính xác cải thiện thế nào.",
+takeaway:"Chọn <strong>một thiên kiến cụ thể</strong> bạn muốn cải thiện trong tháng này. Thiết kế một «routine» cụ thể để chống lại nó. Giữ nhật ký quyết định. Review sau 30 ngày. Cải thiện kỹ năng ra quyết định không phải kỳ tích — là tích lũy từng bước nhỏ có chủ đích."},
+
+// ===== BỔ SUNG: PHÁN ĐOÁN & TRỰC GIÁC (+5) =====
+{cat:"trucgiac",vi:"Trực giác đạo đức trong quyết định",en:"Moral Intuition in Decisions",
+short:"<strong>Trực giác đạo đức (moral intuition)</strong> — cảm giác «điều này sai» hoặc «tôi không thể làm điều đó» — là thông tin đáng xem xét nghiêm túc, không phải chỉ là cảm xúc cần vượt qua.",
+detail:"Jonathan Haidt: <strong>«Social Intuitionist Model»</strong> — phán đoán đạo đức thường đến trước, rồi lý trí hợp lý hóa sau. Nhưng điều này không có nghĩa là trực giác đạo đức luôn đúng — đôi khi chúng phản ánh thiên kiến văn hóa hoặc sợ hãi hơn là nguyên tắc đạo đức sâu xa. Khi trực giác đạo đức «alarm» — hỏi: (1) Điều này vi phạm nguyên tắc cốt lõi nào cụ thể? (2) Tôi có thể giải thích cho người tôn trọng nhất tại sao điều này sai không? (3) Nếu công khai rộng rãi, tôi cảm thấy thế nào? Đây chính là <strong>«newspaper test»</strong> và <strong>«informed person test»</strong>.",
+example:"CFO được yêu cầu «làm đẹp số liệu» một chút trước khi gặp investor — không gian lận kỹ thuật, nhưng «có gì đó không đúng» trong cảm giác. Trực giác đạo đức đang báo hiệu. Áp dụng test: «Nếu cách này được công khai trên báo — tôi cảm thấy thế nào?» Câu trả lời rõ ràng: cần từ chối dù áp lực.",
+takeaway:"Khi có cảm giác <strong>«điều này không đúng»</strong> về một quyết định — đừng bỏ qua hay vội vượt qua bằng lý trí. Hỏi cụ thể: «Điều gì đang vi phạm? Tôi có thể giải thích rõ ràng với người tôn trọng nhất tại sao điều này sai không?» Trực giác đạo đức là hệ thống cảnh báo sớm quan trọng."},
+
+{cat:"trucgiac",vi:"Quyết định theo giá trị cốt lõi",en:"Values-Based Decision Making",
+short:"Khi không chắc chắn về kết quả, <strong>quyết định dựa trên giá trị cốt lõi</strong> — những nguyên tắc bạn cam kết bất kể hậu quả — tạo ra sự nhất quán và giảm cognitive load.",
+detail:"Jeff Bezos: <strong>«Regret Minimization Framework»</strong> ở cấp độ cao hơn là values-based decisions. Amazon có 16 «Leadership Principles» — không phải quy tắc mà là giá trị — giúp mỗi nhân viên ra quyết định mà không cần hỏi cấp trên. Simon Sinek: <strong>«Start with Why»</strong> — khi biết rõ «tại sao» (values/purpose), «cái gì» và «như thế nào» (decisions) trở nên tự nhiên hơn. Trong quyết định khó: (1) Xác định xem quyết định này có xung đột với giá trị cốt lõi nào không; (2) Nếu có — giá trị cốt lõi thường nên thắng, dù không tối ưu ngắn hạn.",
+example:"Patagonia từ chối hợp đồng lớn với retailer muốn bán sản phẩm theo cách không phù hợp với giá trị môi trường của họ. Từ góc độ tài chính: mất doanh thu lớn. Từ góc độ values-based: không thể đi ngược lại purpose cốt lõi. Dài hạn: quyết định này củng cố brand và thu hút nhóm khách hàng loyal nhất.",
+takeaway:"Viết ra <strong>3-5 giá trị cốt lõi không thể thương lượng</strong> của bản thân hoặc tổ chức. Trước quyết định khó, hỏi: «Lựa chọn nào nhất quán nhất với các giá trị này?» Khi kết quả không chắc chắn — hành động nhất quán với giá trị cốt lõi thường là quyết định đúng nhất về dài hạn."},
+
+{cat:"trucgiac",vi:"Thực hành «Steelmanning»",en:"Steelmanning",
+short:"<strong>Steelmanning</strong> — đối lập với straw manning — là trình bày lại lập luận của đối phương theo phiên bản <strong>mạnh nhất và thuyết phục nhất</strong> có thể trước khi phản bác. Đây là tiêu chuẩn cao nhất của tư duy phản biện.",
+detail:"Strawman argument: bóp méo quan điểm đối phương thành phiên bản yếu để dễ phản bác. Steelman: tìm phiên bản mạnh nhất của quan điểm đối lập — đôi khi mạnh hơn cả cách người đó trình bày. Ý nghĩa: (1) Đảm bảo mình hiểu thực sự quan điểm đối lập; (2) Phát hiện điểm mạnh thực sự của phía bên kia; (3) Tìm ra «common ground» ẩn; (4) Tạo ra tư duy chắc chắn hơn khi phải bác bỏ phiên bản mạnh nhất. Đây là cách Socrates tranh luận, là nền tảng của pháp đình đối đáp.",
+example:"Trước khi bác bỏ đề xuất của đồng nghiệp, CEO dành 5 phút steelman: «Phiên bản thuyết phục nhất của đề xuất này là gì? Nếu tôi là người đề xuất, tôi sẽ lập luận thế nào?» Sau đó mới đánh giá. Kết quả: thường phát hiện ra một số điểm hợp lý cần tích hợp vào quyết định cuối, hoặc nhận ra phản đối ban đầu của mình không đủ mạnh.",
+takeaway:"Trước khi phản đối bất kỳ ý kiến nào, <strong>thử steelman nó</strong>: «Phiên bản thuyết phục nhất của quan điểm này là gì? Người thông minh nhất có thể tin điều này vì lý do gì?» Nếu sau khi steelman bạn vẫn không đồng ý — phản bác của bạn mạnh hơn nhiều."},
+
+{cat:"trucgiac",vi:"Giới hạn của chuyên môn",en:"Limits of Expertise",
+short:"Chuyên môn sâu trong một lĩnh vực không tự nhiên chuyển sang lĩnh vực khác. <strong>Nhận biết ranh giới của năng lực</strong> — và biết khi nào cần tìm kiếm góc nhìn ngoài — là kỹ năng quan trọng của người ra quyết định giỏi.",
+detail:"Charlie Munger: <strong>«Circle of Competence»</strong> — biết rõ mình giỏi ở đâu quan trọng hơn giỏi ở đó. Warren Buffett: «Tôi không đầu tư vào thứ tôi không hiểu.» Vấn đề: chuyên gia thường <strong>overconfident ngoài lĩnh vực chuyên môn</strong>, đặc biệt khi lĩnh vực mới «trông có vẻ tương tự» với lĩnh vực họ đã giỏi. Philip Tetlock: superforecasters — những người dự đoán tốt nhất — thường là generalists với humility cao, không phải experts hẹp với confidence cao. Kiểm tra: «Đây có phải lĩnh vực tôi thực sự có data và experience đủ để ra quyết định không?»",
+example:"Một bác sĩ giỏi tự ra quyết định đầu tư bất động sản mà không tham khảo chuyên gia — vì thành công trong y tế khiến ông tự tin quá mức vào khả năng phán đoán của mình trong lĩnh vực hoàn toàn khác. Kết quả: thua lỗ lớn.",
+takeaway:"Với mỗi lĩnh vực quyết định, thành thật hỏi: <strong>«Đây có phải circle of competence của tôi không? Tôi có dữ liệu và kinh nghiệm thực tế hay chỉ có logic trừu tượng?»</strong> Nếu không — tìm người có competence thực sự hoặc đầu tư vào learning trước khi quyết định."},
+
+{cat:"trucgiac",vi:"Điều chỉnh trực giác theo kinh nghiệm",en:"Calibrating Intuition Through Experience",
+short:"Trực giác không phải là cố định — nó được <strong>calibrate (hiệu chỉnh)</strong> và cải thiện qua kinh nghiệm có phản hồi. Nhận biết khi nào trực giác của mình đã được calibrate tốt và khi nào chưa.",
+detail:"Gerd Gigerenzen: trực giác không phải «System 1 thiếu sót» mà là <strong>«ecological rationality»</strong> — tối ưu trong môi trường nó được phát triển. Vấn đề xảy ra khi áp dụng trực giác vào môi trường khác. Cải thiện calibration: (1) Theo dõi độ chính xác của phán đoán theo thời gian; (2) Tìm feedback nhanh và rõ ràng khi có thể; (3) Nhận ra «pattern matching» trực giác đang làm — là pattern có hợp lệ không?; (4) Phân biệt «cảm giác quen» với «cảm giác đúng». Tetlock: những người có calibration tốt là những người thường xuyên cập nhật niềm tin dựa trên feedback và base rates.",
+example:"Một sales manager với 10 năm kinh nghiệm có «gut feeling» khá tốt về khách hàng nào sẽ chốt deal trong tháng — calibrated từ hàng ngàn lần quan sát với feedback rõ ràng (deal chốt hay không). Nhưng cùng gut feeling đó về «market timing» — lĩnh vực thiếu feedback rõ ràng — không đáng tin bằng.",
+takeaway:"Hỏi về bất kỳ trực giác nào: <strong>«Trực giác này được calibrate từ bao nhiêu ví dụ với feedback rõ ràng? Môi trường của những ví dụ đó có giống với tình huống hiện tại không?»</strong> Nếu không — cần phân tích có chủ đích thay vì tin vào trực giác."},
+
+// ===== BỔ SUNG 3 ENTRIES CÒN THIẾU =====
+{cat:"hethong",vi:"Hiệu ứng Butterfly và tính nhạy cảm khởi điểm",en:"Butterfly Effect and Sensitive Dependence",
+short:"Trong các hệ thống phức tạp, <strong>điều kiện ban đầu nhỏ</strong> có thể tạo ra kết quả khác nhau hoàn toàn — điều này giải thích tại sao dự đoán dài hạn trong hệ thống phức tạp thường không tin cậy được.",
+detail:"Edward Lorenz (1963) phát hiện trong mô hình dự báo thời tiết: thay đổi nhỏ đến 0.000127 trong điều kiện ban đầu tạo ra kết quả hoàn toàn khác sau vài tuần. Câu hỏi của ông: liệu cánh bướm ở Brazil có gây ra lốc xoáy ở Texas không? Hàm ý cho ra quyết định: (1) <strong>Dự đoán dài hạn trong hệ thống phức tạp luôn bất định</strong> — không phải vì thiếu dữ liệu mà vì bản chất toán học của hệ thống; (2) <strong>Thời điểm và bối cảnh của quyết định quan trọng</strong> — cùng một hành động ở hai thời điểm khác nhau có thể tạo kết quả hoàn toàn khác; (3) Hệ quả: <strong>khiêm tốn về dự đoán</strong>, linh hoạt trong thực thi, và học nhanh từ phản hồi thực tế thay vì bám vào kế hoạch chi tiết dài hạn.",
+example:"Startup Slack bắt đầu là một công ty game thất bại — tool chat nội bộ họ tự xây trong quá trình phát triển game trở thành sản phẩm thực sự. Một quyết định nhỏ «thử dùng tool này cho team khác» ở đúng thời điểm tạo ra công ty tỷ đô. Điều kiện ban đầu nhỏ, kết quả phi tuyến không ai dự đoán được từ đầu.",
+takeaway:"Trong môi trường phức tạp, <strong>đừng bị ám ảnh bởi độ chính xác của kế hoạch dài hạn</strong>. Thay vào đó: xây dựng năng lực học hỏi và điều chỉnh nhanh, giữ optionality, và ra quyết định theo từng giai đoạn với thông tin thực tế thay vì bám vào dự báo không chắc chắn."},
+
+{cat:"hethong",vi:"Mô hình tâm thần đa chiều",en:"Multi-Model Thinking",
+short:"Charlie Munger: dùng <strong>nhiều mô hình tư duy từ nhiều lĩnh vực</strong> cùng lúc để phân tích vấn đề — như nhìn qua nhiều lăng kính khác nhau, mỗi lăng kính tiết lộ một phần sự thật mà lăng kính khác bỏ qua.",
+detail:"Munger gọi đây là <strong>«latticework of mental models»</strong> — mạng lưới các mô hình từ vật lý (tư duy hệ thống, entropy), sinh học (tiến hóa, thích nghi), tâm lý học (thiên kiến nhận thức), kinh tế (chi phí cơ hội, incentives), và nhiều lĩnh vực khác. Tại sao quan trọng: mỗi mô hình chỉ «đúng» trong phạm vi giả định của nó — dùng một mô hình duy nhất là <strong>«hammer and nail problem»</strong>. Khi nhiều mô hình từ lĩnh vực khác nhau cùng chỉ về một kết luận — <strong>«Lollapalooza effect»</strong> (Munger) — đó là tín hiệu mạnh mẽ. Thực hành: sau khi phân tích vấn đề theo một góc nhìn, chủ động hỏi «Mô hình từ lĩnh vực khác sẽ nhìn vấn đề này thế nào?»",
+example:"Phân tích quyết định có nên giảm giá sản phẩm: mô hình kinh tế (demand curve — có thể tăng revenue); mô hình tâm lý (anchoring — giảm giá có thể tạo kỳ vọng giá thấp lâu dài); mô hình cạnh tranh (signal — đối thủ sẽ phản ứng thế nào); mô hình hệ thống (feedback loop — giảm giá → tăng volume → có thể giảm chất lượng dịch vụ do quá tải). Mỗi mô hình tiết lộ một rủi ro khác nhau mà phân tích đơn độc bỏ qua.",
+takeaway:"Với quyết định phức tạp, <strong>phân tích qua ít nhất 3-4 mô hình từ lĩnh vực khác nhau</strong>. Hỏi: «Nhà kinh tế học sẽ nhìn điều này thế nào? Nhà tâm lý học? Kỹ sư hệ thống? Chuyên gia tiến hóa?» Khi nhiều mô hình đồng thuận — tự tin hơn. Khi chúng mâu thuẫn — cần phân tích sâu hơn."},
+
+{cat:"nhom",vi:"Nguyên tắc người đề xuất giải thích",en:"Explainability Principle",
+short:"Người ra quyết định cần có khả năng <strong>giải thích rõ ràng lý do</strong> cho quyết định của mình — không phải để biện hộ, mà vì khả năng giải thích là bài kiểm tra chất lượng tư duy và là nền tảng của trách nhiệm giải trình.",
+detail:"Jeff Bezos yêu cầu team viết <strong>«6-pager memo»</strong> thay vì PowerPoint — lý do: văn viết đòi hỏi tư duy rõ ràng và logic nhất quán, trong khi slide có thể che giấu lỗ hổng tư duy sau những bullet point ấn tượng. Nguyên tắc: nếu không thể giải thích quyết định bằng ngôn ngữ đơn giản cho người không có chuyên môn — có thể chưa hiểu đủ sâu để ra quyết định tốt (<strong>«Feynman Technique»</strong>). Trong quyết định nhóm: explainability tạo ra <strong>accountability</strong> — ai ra quyết định, dựa trên lý do gì, với thông tin nào — có thể được kiểm tra sau khi biết kết quả. Không phải để phán xét, mà để học hỏi tổ chức.",
+example:"Một investment committee yêu cầu mọi quyết định đầu tư phải được giải thích trong 1 trang: (1) Luận điểm đầu tư chính; (2) Rủi ro chính và tại sao chấp nhận được; (3) Điều gì có thể làm luận điểm này sai; (4) Điều kiện để thoát. Quy trình này không chỉ cải thiện chất lượng quyết định mà còn tạo ra hồ sơ học hỏi sau khi biết kết quả.",
+takeaway:"Trước khi finalize quyết định quan trọng, <strong>viết ra một đoạn văn ngắn</strong>: «Chúng ta quyết định X vì Y, với giả định Z, chấp nhận rủi ro W, và sẽ biết mình sai nếu thấy V.» Nếu không thể viết được đoạn văn này một cách rõ ràng — chưa sẵn sàng để ra quyết định."},
+
+];
+
+const CAT_MAP={};
+CATS.forEach(c=>CAT_MAP[c.key]=c);
+
+const chipsEl=document.getElementById('chips');
+let activeCat='all';
+let activeCard=null; // track currently open card
+
+function renderChips(){
+  chipsEl.innerHTML='';
+  const allC=document.createElement('div');
+  allC.className='chip'+(activeCat==='all'?' active':'');
+  allC.innerHTML='<span class="dot" style="--dotcolor:#999"></span> Tất cả';
+  allC.onclick=()=>{activeCat='all';renderChips();renderGrid();};
+  chipsEl.appendChild(allC);
+  CATS.forEach(c=>{
+    const chip=document.createElement('div');
+    chip.className='chip'+(activeCat===c.key?' active':'');
+    chip.style.setProperty('--dotcolor',c.color);
+    chip.innerHTML=`<span class="dot"></span> ${c.label}`;
+    chip.onclick=()=>{activeCat=c.key;renderChips();renderGrid();};
+    chipsEl.appendChild(chip);
+  });
+}
+
+const gridEl=document.getElementById('grid');
+const noResultsEl=document.getElementById('noResults');
+const countRowEl=document.getElementById('countRow');
+let filtered=[];
+
+function renderGrid(){
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  activeCard=null; // reset active card on re-render
+  filtered=DATA.map((d,i)=>({...d,idx:i})).filter(d=>{
+    const matchCat=activeCat==='all'||d.cat===activeCat;
+    const text=(d.vi+' '+d.en+' '+d.short+' '+d.detail).toLowerCase();
+    return matchCat&&(q===''||text.includes(q));
+  });
+  gridEl.innerHTML='';
+  noResultsEl.style.display=filtered.length===0?'block':'none';
+
+  filtered.forEach((d,di)=>{
+    const cat=CAT_MAP[d.cat];
+    const card=document.createElement('div');
+    card.className='card';
+    card.style.setProperty('--cc',cat.color);
+    card.dataset.idx=String(di);
+
+    card.innerHTML=`
+      <div class="card-header" onclick="toggleCard(this)">
+        <div class="card-meta">
+          <span class="card-num">#${String(d.idx+1).padStart(3,'0')}</span>
+          <span class="cat-badge">${cat.label}</span>
+        </div>
+        <div class="card-title">${d.vi}</div>
+        <div class="card-en">${d.en}</div>
+        <div class="card-short">${d.short}</div>
+        <div class="card-toggle" id="toggle-${di}">
+          Xem chi tiết
+          <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="card-body" id="body-${di}">
+        <div class="card-body-inner">
+          <div class="section">
+            <div class="section-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Giải thích
+            </div>
+            <div class="section-text">${d.detail}</div>
+          </div>
+          <div class="section">
+            <div class="section-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              Ví dụ thực tế
+            </div>
+            <div class="example-box">${d.example}</div>
+          </div>
+          <div class="section">
+            <div class="section-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Điểm mấu chốt
+            </div>
+            <div class="takeaway-box">${d.takeaway}</div>
+          </div>
+        </div>
+      </div>`;
+    gridEl.appendChild(card);
+  });
+
+  countRowEl.textContent=`Hiển thị ${filtered.length} / ${DATA.length} khái niệm`;
+}
+
+function setToggleText(toggle, isOpen){
+  toggle.innerHTML = isOpen
+    ? 'Thu gọn <svg class="arr open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
+    : 'Xem chi tiết <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+  toggle.classList.toggle('open', isOpen);
+}
+
+function closeCard(card){
+  const body=card.querySelector('.card-body');
+  const toggle=card.querySelector('.card-toggle');
+  body.classList.remove('open');
+  setToggleText(toggle, false);
+}
+
+function openCard(card){
+  const body=card.querySelector('.card-body');
+  const toggle=card.querySelector('.card-toggle');
+  body.classList.add('open');
+  setToggleText(toggle, true);
+  // Smooth scroll so the card is visible
+  setTimeout(()=>{
+    const rect=card.getBoundingClientRect();
+    if(rect.top < 80){
+      card.scrollIntoView({behavior:'smooth', block:'nearest'});
+    }
+  }, 60);
+}
+
+function toggleCard(header){
+  const card=header.parentElement;
+  const body=card.querySelector('.card-body');
+  const isOpen=body.classList.contains('open');
+
+  // Close previously open card (accordion behaviour)
+  if(activeCard && activeCard !== card){
+    closeCard(activeCard);
+    activeCard=null;
+  }
+
+  if(isOpen){
+    closeCard(card);
+    activeCard=null;
+  } else {
+    openCard(card);
+    activeCard=card;
+  }
+}
+
+document.getElementById('search').addEventListener('input', renderGrid);
+renderChips();
+renderGrid();
+</script>
+</body>
+</html>
